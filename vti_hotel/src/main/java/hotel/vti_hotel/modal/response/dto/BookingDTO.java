@@ -1,5 +1,6 @@
 package hotel.vti_hotel.modal.response.dto;
 
+import com.nimbusds.openid.connect.sdk.assurance.evidences.Voucher;
 import hotel.vti_hotel.modal.entity.Booking;
 import lombok.Data;
 
@@ -19,10 +20,10 @@ public class BookingDTO {
         this.bookingId = String.valueOf(booking.getId());
         this.account = String.valueOf(new AccountDTO(booking.getAccount()));
         this.room = String.valueOf(new RoomDTO(booking.getRoom()));
-        this.typeBooking = String.valueOf(booking.getTypeBooking());
+        this.typeBooking = booking.getTypeBooking().toString();
         this.checkIn = String.valueOf(booking.getCheckIn());
         this.checkOut = String.valueOf(booking.getCheckOut());
-        this.voucher = String.valueOf(booking.getVoucher());
+        this.voucher = String.valueOf(new VoucherDTO(booking.getVoucher()));
         this.totalPrice = String.valueOf(booking.getTotalPrice());
         this.bookingStatus = booking.getStatus().toString();
     }

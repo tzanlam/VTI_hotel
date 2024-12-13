@@ -41,7 +41,8 @@ public class Account extends Base{
     private Gender gender;
 
     @Column(name = "level")
-    private String level;
+    @Enumerated(EnumType.STRING)
+    private Level level;
 
     @Column(name = "amount_spent")
     private double amountSpent;
@@ -58,14 +59,29 @@ public class Account extends Base{
     private StatusAccount status;
 
     public enum Role {
-        ADMIN, USER
+        ADMIN,
+        USER
     }
 
     public enum StatusAccount{
-        ACTIVE, INACTIVE, BLOCKED, PENDING
+        ACTIVE,
+        INACTIVE,
+        BLOCKED,
+        PENDING
     }
 
     public enum Gender{
-        MALE, FEMALE
+        MALE,
+        FEMALE,
+        UNKNOWN
+    }
+
+    public enum Level{
+        NEW_CUSTOMER,
+        BRONZE_CUSTOMER,
+        SILVER_CUSTOMER,
+        GOLD_CUSTOMER,
+        LOYAL_CUSTOMER,
+        OLD_CUSTOMER,
     }
 }
