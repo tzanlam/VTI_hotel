@@ -25,6 +25,10 @@ public class Review extends Base{
     @JoinColumn(name = "booking_id", referencedColumnName = "id")
     private Booking booking;
 
+    @ManyToOne
+    @JoinColumn(name = "fast_booking_id", referencedColumnName = "id")
+    private FastBooking fastBooking;
+
     @Column(name = "rating")
     private int rating;
 

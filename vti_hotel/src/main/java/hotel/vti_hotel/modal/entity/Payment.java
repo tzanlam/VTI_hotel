@@ -21,6 +21,10 @@ public class Payment extends Base{
     @JoinColumn(name = "booking_id", referencedColumnName = "id")
     private Booking booking;
 
+    @OneToOne
+    @JoinColumn(name = "fast_booking_id", referencedColumnName = "id")
+    private FastBooking fastBooking;
+
     @Column(name = "transaction_id")
     private String transactionId;
 

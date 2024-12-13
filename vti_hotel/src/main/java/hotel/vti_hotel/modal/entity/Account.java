@@ -36,6 +36,10 @@ public class Account extends Base{
     @Column(name = "image_card")
     private String imageCard;
 
+    @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     @Column(name = "level")
     private String level;
 
@@ -59,5 +63,9 @@ public class Account extends Base{
 
     public enum StatusAccount{
         ACTIVE, INACTIVE, BLOCKED, PENDING
+    }
+
+    public enum Gender{
+        MALE, FEMALE
     }
 }

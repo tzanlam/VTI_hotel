@@ -18,6 +18,9 @@ public class FastBooking extends Base{
     @Column(name = "full_name")
     private String fullName;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
