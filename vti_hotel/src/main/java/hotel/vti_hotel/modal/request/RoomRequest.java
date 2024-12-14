@@ -24,6 +24,18 @@ public class RoomRequest {
         return room;
     }
 
+    public Room changeQuantity(Room room) {
+        room.setQuantity(quantity);
+        return room;
+    }
+
+    public Room changePrice(Room room){
+        room.setPriceDay(Double.parseDouble(priceDay));
+        room.setPriceNight(Double.parseDouble(priceNight));
+        room.setPriceFirstHour(Double.parseDouble(priceFirstHour));
+        return room;
+    }
+
     private void populate(Room room) {
         room.setName(name);
         room.setImageRoom(imageRoom);

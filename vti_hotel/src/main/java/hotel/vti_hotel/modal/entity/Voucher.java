@@ -27,6 +27,9 @@ public class Voucher extends Base{
     @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "point")
+    private int point;
+
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusVoucher status;
