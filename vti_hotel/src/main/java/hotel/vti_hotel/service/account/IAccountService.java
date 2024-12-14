@@ -10,9 +10,11 @@ public interface IAccountService {
     List<AccountDTO> findAccounts();
     AccountDTO findAccountById(int id);
     AccountDTO findAccountByEmail(String email);
+
     // create
     AccountDTO createAccount(AccountRequest request);
     AccountDTO registerAccount(AccountRequest request);
+
     // update
     AccountDTO updateAccount(int id, AccountRequest request);
 }
