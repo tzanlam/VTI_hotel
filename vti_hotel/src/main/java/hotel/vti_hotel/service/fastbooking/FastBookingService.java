@@ -2,17 +2,15 @@ package hotel.vti_hotel.service.fastbooking;
 
 import hotel.vti_hotel.modal.entity.Booking;
 import hotel.vti_hotel.modal.entity.FastBooking;
-import hotel.vti_hotel.modal.entity.Room;
 import hotel.vti_hotel.modal.request.FastBookingRequest;
 import hotel.vti_hotel.modal.response.dto.FastBookingDTO;
 import hotel.vti_hotel.repository.FastBookingRepository;
 import hotel.vti_hotel.repository.RoomRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static hotel.vti_hotel.support.ConvertString.*;
@@ -55,9 +53,8 @@ public class FastBookingService implements IFastBooking{
     @Override
     public FastBookingDTO createFastBook(FastBookingRequest request) {
         FastBooking fastBooking = new FastBooking();
-        FastBooking newFastBooking = populate(fastBooking, request);
-        fastBookingRepository.save(newFastBooking);
-        return new FastBookingDTO(newFastBooking);
+        populate(fastBooking, request);
+        return new FastBookingDTO(fastBookingRepository.save(fastBooking));
     }
 
     @Override
@@ -65,16 +62,51 @@ public class FastBookingService implements IFastBooking{
         return null;
     }
 
-    private FastBooking populate(FastBooking fastBooking, FastBookingRequest request) {
+    private void populate(FastBooking fastBooking, FastBookingRequest request) {
         fastBooking.setFullName(request.getFullName());
         fastBooking.setPhoneNumber(request.getPhoneNumber());
+        fastBooking.setRoom(roomRepository.findById(request.getRoomId()).orElseThrow(() -> new NullPointerException("Room not found")));
+        fastBooking.setType(convertToEnum(Booking.TypeBooking.class, request.getTypeBooking()));
 
-        Room room = roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new NullPointerException("Not found with Room id: " + request.getRoomId()));
-        fastBooking.setRoom(room);
+        LocalDateTime checkIn = buildLocalDateTime(request.getCheckInDate(), request.getCheckInTime());
+        LocalDateTime checkOut;
 
-        Booking.TypeBooking typeBooking = convertToEnum(Booking.TypeBooking.class, request.getTypeBooking());
-        fastBooking.setType(typeBooking);
-        return fastBooking;
+        switch (convertToEnum(Booking.TypeBooking.class, request.getTypeBooking())) {
+            case HOURLY:
+                if (request.getCheckOutTime() == null || request.getCheckOutTime().isBlank()) {
+                    throw new IllegalArgumentException("HOURLY booking requires a valid checkout time.");
+                }
+                checkOut = buildLocalDateTime(request.getCheckInDate(), request.getCheckOutTime());
+                if (checkOut.isBefore(checkIn) || Duration.between(checkIn, checkOut).toHours() > 8) {
+                    throw new IllegalArgumentException("HOURLY booking must not exceed 8 hours and checkout must be after check-in.");
+                }
+                break;
+
+            case DAILY:
+                checkIn = checkIn.withHour(14).withMinute(0).withSecond(0).withNano(0);
+                checkOut = checkIn.plusDays(1).withHour(12).withMinute(0).withSecond(0).withNano(0);
+
+                if (request.getCheckOutDate() != null && !request.getCheckOutDate().isBlank()) {
+                    LocalDateTime customCheckOut = buildLocalDateTime(request.getCheckOutDate(), "12:00:00");
+                    if (customCheckOut.isAfter(checkIn)) {
+                        checkOut = customCheckOut;
+                    } else {
+                        throw new IllegalArgumentException("DAILY booking checkout must be after check-in.");
+                    }
+                }
+                break;
+
+            case NIGHTLY:
+                checkIn = checkIn.withHour(22).withMinute(0).withSecond(0).withNano(0);
+                checkOut = checkIn.plusDays(1).withHour(12).withMinute(0).withSecond(0).withNano(0);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid booking type.");
+        }
+
+        fastBooking.setCheckIn(checkIn);
+        fastBooking.setCheckOut(checkOut);
     }
+
 }
