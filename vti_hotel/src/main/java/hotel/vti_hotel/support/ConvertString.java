@@ -48,4 +48,10 @@ public class ConvertString {
                     "Value '" + value + "' is not valid for enum class " + enumClass.getSimpleName());
         }
     }
+
+    public static LocalDateTime buildLocalDateTime(String date, String time) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return LocalDateTime.of(LocalDate.parse(date, dateFormatter), LocalTime.parse(time, timeFormatter));
+    }
 }
