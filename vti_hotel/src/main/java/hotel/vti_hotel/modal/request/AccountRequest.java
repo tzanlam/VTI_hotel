@@ -48,9 +48,8 @@ public class AccountRequest {
         return account;
     }
 
-    public Account updateAccount(Account account){
+    public void updateAccount(Account account){
         populateAccount(account);
-        return account;
     }
     private void populateAccount(Account account) {
         account.setFullName(fullName);

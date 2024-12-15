@@ -21,9 +21,8 @@ public class VoucherRequest {
         return voucher;
     }
 
-    public Voucher updateVoucher(Voucher voucher) {
+    public void updateVoucher(Voucher voucher) {
         populate(voucher);
-        return voucher;
     }
 
     private void populate(Voucher voucher) {

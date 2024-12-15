@@ -33,4 +33,7 @@ public class Room extends Base{
 
     @Column(name = "price_first_hour")
     private double priceFirstHour;
+
+    @Column(name = "price_next_hour")
+    private double priceNextHour;
 }

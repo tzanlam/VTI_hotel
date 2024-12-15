@@ -12,6 +12,7 @@ public class RoomRequest {
     private String priceDay;
     private String priceNight;
     private String priceFirstHour;
+    private String priceNextHour;
 
     public Room createRoom() {
         Room room = new Room();
@@ -19,21 +20,18 @@ public class RoomRequest {
         return room;
     }
 
-    public Room updateRoom(Room room) {
+    public void updateRoom(Room room) {
         populate(room);
-        return room;
     }
 
-    public Room changeQuantity(Room room) {
+    public void changeQuantity(Room room) {
         room.setQuantity(quantity);
-        return room;
     }
 
-    public Room changePrice(Room room){
+    public void changePrice(Room room){
         room.setPriceDay(Double.parseDouble(priceDay));
         room.setPriceNight(Double.parseDouble(priceNight));
         room.setPriceFirstHour(Double.parseDouble(priceFirstHour));
-        return room;
     }
 
     private void populate(Room room) {
@@ -44,5 +42,6 @@ public class RoomRequest {
         room.setPriceDay(Double.parseDouble(priceDay));
         room.setPriceNight(Double.parseDouble(priceNight));
         room.setPriceFirstHour(Double.parseDouble(priceFirstHour));
+        room.setPriceNextHour(Double.parseDouble(priceNextHour));
     }
 }
