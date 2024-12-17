@@ -108,5 +108,4 @@ public class FastBookingService implements IFastBooking{
         fastBooking.setCheckIn(checkIn);
         fastBooking.setCheckOut(checkOut);
     }
-
 }
