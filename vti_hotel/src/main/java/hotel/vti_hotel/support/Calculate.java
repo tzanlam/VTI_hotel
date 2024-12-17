@@ -8,7 +8,7 @@ public class Calculate {
     }
 
     public static double calculatePriceDay(Room room, int day){
-        return room.getPriceDay();
+        return room.getPriceDay()*day;
     }
 
     public static double calculatePriceNight(Room room){
