@@ -7,7 +7,9 @@ public class BookingRequest {
     private int accountId;
     private int roomId;
     private String typeBooking;
-    private String checkIn;
-    private String checkOut;
+    private String checkInDate;
+    private String checkOutDate;
+    private String checkInTime;
+    private String checkOutTime;
     private int voucherId;
 }

@@ -13,9 +13,8 @@ public class Review extends Base{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id", referencedColumnName = "id")
-    private Account account;
+    @Column(name = "full_name")
+    private String fullName;
 
     @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "id")
