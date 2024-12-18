@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class ReviewDTO {
     private String reviewId;
-    private String account;
+    private String fullName;
     private String room;
     private String booking;
     private String fastBooking;
@@ -15,7 +15,7 @@ public class ReviewDTO {
 
     public ReviewDTO(Review review) {
         this.reviewId = String.valueOf(review.getId());
-        this.account = String.valueOf(new AccountDTO(review.getAccount()));
+        this.fullName = review.getFullName();
         this.room = String.valueOf(new RoomDTO(review.getRoom()));
         this.booking = String.valueOf(new BookingDTO(review.getBooking()));
         this.fastBooking = String.valueOf(new FastBookingDTO(review.getFastBooking()));

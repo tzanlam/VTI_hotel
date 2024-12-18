@@ -35,6 +35,15 @@ public class Payment extends Base{
     @Enumerated(EnumType.STRING)
     private StatusPayment status;
 
+    @Column(name = "vnp_response_code")
+    private String vnpResponseCode;
+
+    @Column(name = "vnp_transaction_status")
+    private String vnpTransactionStatus;
+
+    @Column(name = "payment_url")
+    private String paymentUrl;
+
     public enum StatusPayment{
         SUCCESS, FAILED, PENDING
     }
