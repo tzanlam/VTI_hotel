@@ -43,26 +43,29 @@
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
-
 		<!-- Spring Boot Starter Web đã bao gồm hỗ trợ multipart -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
-		<!-- Commons FileUpload hỗ trợ upload file -->
 		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.4</version> <!-- Hoặc phiên bản mới nhất -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
+<!--		&lt;!&ndash; Commons FileUpload hỗ trợ upload file &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>commons-fileupload</groupId>-->
+<!--			<artifactId>commons-fileupload</artifactId>-->
+<!--			<version>1.4</version> &lt;!&ndash; Hoặc phiên bản mới nhất &ndash;&gt;-->
+<!--		</dependency>-->
 
-		<!-- Commons IO hỗ trợ xử lý IO -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.11.0</version> <!-- Hoặc phiên bản mới nhất -->
-		</dependency>
+<!--		&lt;!&ndash; Commons IO hỗ trợ xử lý IO &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>commons-io</groupId>-->
+<!--			<artifactId>commons-io</artifactId>-->
+<!--			<version>2.11.0</version> &lt;!&ndash; Hoặc phiên bản mới nhất &ndash;&gt;-->
+<!--		</dependency>-->
 
 
 		<dependency>
@@ -130,10 +133,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
@@ -147,11 +146,6 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>

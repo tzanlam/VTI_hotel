@@ -1,6 +1,5 @@
 package hotel.vti_hotel.modal.response.dto;
 
-import com.nimbusds.openid.connect.sdk.assurance.evidences.Voucher;
 import hotel.vti_hotel.modal.entity.Booking;
 import lombok.Data;
 

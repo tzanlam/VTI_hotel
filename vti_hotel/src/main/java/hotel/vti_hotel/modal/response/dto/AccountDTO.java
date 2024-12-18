@@ -27,7 +27,7 @@ public class AccountDTO {
         this.birthDate = String.valueOf(account.getBirthDate());
         this.imageCard = account.getImageCard();
         this.gender = account.getGender().toString();
-        this.accountLevel = account.getLevel();
+        this.accountLevel = String.valueOf(account.getLevel());
         this.amountSpent = String.valueOf(account.getAmountSpent());
         this.cumulativePoint = String.valueOf(account.getCumulativePoints());
         this.accountStatus = String.valueOf(account.getStatus());
