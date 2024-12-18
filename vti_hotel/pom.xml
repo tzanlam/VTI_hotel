@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>hotel</groupId>
-	<artifactId>vti_hotel</artifactId>
+	<artifactId>hotel</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>vti_hotel</name>
-	<description>vti_hotel</description>
+	<name>hotel</name>
+	<description>hotel</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -43,29 +43,29 @@
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
 		<!-- Spring Boot Starter Web đã bao gồm hỗ trợ multipart -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-<!--		&lt;!&ndash; Commons FileUpload hỗ trợ upload file &ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>commons-fileupload</groupId>-->
-<!--			<artifactId>commons-fileupload</artifactId>-->
-<!--			<version>1.4</version> &lt;!&ndash; Hoặc phiên bản mới nhất &ndash;&gt;-->
-<!--		</dependency>-->
 
-<!--		&lt;!&ndash; Commons IO hỗ trợ xử lý IO &ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>commons-io</groupId>-->
-<!--			<artifactId>commons-io</artifactId>-->
-<!--			<version>2.11.0</version> &lt;!&ndash; Hoặc phiên bản mới nhất &ndash;&gt;-->
-<!--		</dependency>-->
+		<!-- Commons FileUpload hỗ trợ upload file -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version> <!-- Hoặc phiên bản mới nhất -->
+		</dependency>
+
+		<!-- Commons IO hỗ trợ xử lý IO -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.11.0</version> <!-- Hoặc phiên bản mới nhất -->
+		</dependency>
 
 
 		<dependency>
@@ -73,7 +73,6 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-
 		<!--two dependency Mail-->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -101,11 +100,6 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.11.2</version>
 			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<version>3.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -147,6 +141,11 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<!--        <dependency>-->
+		<!--            <groupId>org.springframework.boot</groupId>-->
+		<!--            <artifactId>spring-boot-starter-test</artifactId>-->
+		<!--            <scope>test</scope>-->
+		<!--        </dependency>-->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
@@ -156,18 +155,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
