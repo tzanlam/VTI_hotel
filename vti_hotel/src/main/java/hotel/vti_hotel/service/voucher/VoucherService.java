@@ -7,6 +7,7 @@ import hotel.vti_hotel.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -32,6 +33,18 @@ public class VoucherService implements IVoucherService {
         return voucherRepository.findByPoint(point).stream()
                 .map(VoucherDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<VoucherDTO> getVoucherActive() {
+        List<Voucher> vouchers = voucherRepository.findAll();
+        List<VoucherDTO> voucherDTOS = new ArrayList<>();
+        for (Voucher voucher : vouchers) {
+            if (voucher.getStatus() == Voucher.StatusVoucher.ACTIVE){
+                voucherDTOS.add(new VoucherDTO(voucher));
+            }
+        }
+        return voucherDTOS;
     }
 
     @Override

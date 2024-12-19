@@ -10,6 +10,7 @@ public interface IVoucherService {
     List<VoucherDTO> getVouchers();
     VoucherDTO getVoucherById(int id);
     List<VoucherDTO> getByPoint(int point);
+    List<VoucherDTO> getVoucherActive();
 
     // create
     VoucherDTO createNewVoucher(VoucherRequest request);
