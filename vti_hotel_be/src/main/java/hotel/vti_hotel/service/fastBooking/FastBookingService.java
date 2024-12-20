@@ -1,4 +1,4 @@
-package hotel.vti_hotel.service.fastbooking;
+package hotel.vti_hotel.service.fastBooking;
 
 import hotel.vti_hotel.modal.entity.Booking;
 import hotel.vti_hotel.modal.entity.FastBooking;
