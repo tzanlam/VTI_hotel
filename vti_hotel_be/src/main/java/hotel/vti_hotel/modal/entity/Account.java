@@ -58,6 +58,9 @@ public class Account extends Base{
     @Enumerated(EnumType.STRING)
     private StatusAccount status;
 
+    @Column(name = "confirmCode")
+    private String confirmCode;
+
     public enum Role {
         ADMIN,
         USER
