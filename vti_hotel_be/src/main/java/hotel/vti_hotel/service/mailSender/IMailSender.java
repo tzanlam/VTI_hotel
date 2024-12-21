@@ -1,12 +1,13 @@
 package hotel.vti_hotel.service.mailSender;
 
 import hotel.vti_hotel.modal.request.MailSenderRequest;
+import jakarta.mail.MessagingException;
 
 public interface IMailSender {
-    String mailSendCodeConfirm(MailSenderRequest request);
-    String mailSendForgotPassword(MailSenderRequest request);
-    String mailInformationBooking(int bookingId, MailSenderRequest request);
-    String mailCanceledBooking(int bookingId, MailSenderRequest request);
-    String mailInformationFastBooking(int fastBookingId, MailSenderRequest request);
-    String mailCanceledFastBooking(int fastBookingId, MailSenderRequest request);
+    void mailSendCodeConfirm(MailSenderRequest request, String codeConfirm) throws MessagingException;
+    String mailSendForgotPassword(MailSenderRequest request) throws MessagingException;
+    String mailInformationBooking(int bookingId, MailSenderRequest request) throws MessagingException;
+    String mailCanceledBooking(int bookingId, MailSenderRequest request) throws MessagingException;
+    String mailInformationFastBooking(int fastBookingId, MailSenderRequest request) throws MessagingException;
+    String mailCanceledFastBooking(int fastBookingId, MailSenderRequest request) throws MessagingException;
 }
