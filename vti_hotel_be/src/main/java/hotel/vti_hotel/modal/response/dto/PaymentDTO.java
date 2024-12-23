@@ -12,6 +12,7 @@ public class PaymentDTO {
     private String transactionId;
     private String paymentPrice;
     private String paymentStatus;
+    private String paymentUrl;
 
     public PaymentDTO(Payment payment) {
         this.paymentId = String.valueOf(payment.getId());
@@ -21,5 +22,6 @@ public class PaymentDTO {
         this.transactionId = String.valueOf(payment.getTransactionId());
         this.paymentPrice = String.valueOf(payment.getPrice());
         this.paymentStatus = String.valueOf(payment.getStatus());
+        this.paymentUrl = payment.getPaymentUrl();
     }
 }

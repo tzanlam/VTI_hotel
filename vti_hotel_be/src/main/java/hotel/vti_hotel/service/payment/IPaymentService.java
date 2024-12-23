@@ -10,7 +10,7 @@ public interface IPaymentService {
     // find
     List<PaymentDTO> getPayments();
     PaymentDTO getPaymentById(int id);
-    PaymentDTO getPaymentByTransactionId(String transactionId);
+    PaymentDTO getPaymentByTransactionId(String transactionId) throws Exception;
 
     // create
     PaymentDTO createPayment(PaymentRequest request);
