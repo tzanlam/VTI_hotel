@@ -66,7 +66,7 @@ public class FastBookingController {
         }
     }
 
-    @PostMapping("/changeStatusFastBooking")
+    @PutMapping("/changeStatusFastBooking")
     public ResponseEntity<?> changeStatusFastBooking(@RequestParam("fastBookingId") int id, @RequestParam("status") String status) {
         try{
             return ResponseEntity.ok(fastBooking.changeStatusFastBook(id, status));
