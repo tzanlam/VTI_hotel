@@ -35,7 +35,7 @@ public class RoomController {
         }
     }
 
-    @PostMapping("/createRooms")
+    @PostMapping("/createRoom")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> createRooms(@RequestBody RoomRequest request){
         try{

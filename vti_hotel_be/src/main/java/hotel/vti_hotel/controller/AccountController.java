@@ -17,7 +17,7 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping("findAccounts")
+    @GetMapping("/findAccounts")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getAccounts(){
         try{
@@ -47,7 +47,7 @@ public class AccountController {
         }
     }
 
-    @PostMapping("createAccountByAdmin")
+    @PostMapping("/createAccountByAdmin")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> createAccountByAdmin(@RequestBody AccountRequest request){
         try {
@@ -58,7 +58,7 @@ public class AccountController {
     }
 
     @PutMapping("/updateAccount")
-    public ResponseEntity<?> updateAccount(@RequestParam("accountID") int id, @RequestBody AccountRequest request){
+    public ResponseEntity<?> updateAccount(@RequestParam("accountId") int id, @RequestBody AccountRequest request){
         try{
             return new ResponseEntity<>(accountService.updateAccount(id, request), HttpStatus.OK);
         }catch(Exception e){
