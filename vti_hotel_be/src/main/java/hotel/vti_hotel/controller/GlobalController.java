@@ -19,14 +19,14 @@ public class GlobalController {
         this.globalService = globalService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        try{
-            return ResponseEntity.ok(globalService.login(loginRequest));
-        }catch(Exception e){
-            return new ResponseEntity<>("Error: "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        @PostMapping("/login")
+        public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+            try{
+                return ResponseEntity.ok(globalService.login(loginRequest));
+            }catch(Exception e){
+                return new ResponseEntity<>("Error: "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
-    }
 
     @PostMapping("/upImage")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")

@@ -21,7 +21,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
     private final JwtAuthenticationPoint jwtAuthenticationPoint;
     private final JwtFilterRequest jwtFilterRequest;
@@ -73,6 +73,9 @@ public class SecurityConfig {
                                 "/hotel/findVoucherById",
                                 "/hotel/findVoucherByPoint",
                                 "/hotel/findVoucherActive"
+
+                                // more
+                                ,"/hotel/login"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilterRequest, UsernamePasswordAuthenticationFilter.class);
