@@ -9,21 +9,23 @@ export const url = axios.create({
     },
 });
 
+
 url.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem("token");
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `${token}`;
         }
         return config;
     },
-    (error) => {
+    function (error){
         return Promise.reject(error);
     }
 );
 
 url.interceptors.response.use(
-    (response) => response,
+    (response) => 
+        {return response},
     (error) => {
         if (!error.response) {
             notification.error({
@@ -37,19 +39,19 @@ url.interceptors.response.use(
             case 401:
                 notification.error({
                     message: "Unauthorized",
-                    description: "You are not authorized to access this resource.",
+                    description: "Không đủ quyền hạn truy cập.",
                 });
                 break;
             case 403:
                 notification.error({
                     message: "Forbidden",
-                    description: "You do not have permission to access this resource.",
+                    description: "Bạn không có quyền truy cập.",
                 });
                 break;
             case 500:
                 notification.error({
                     message: "Server Error",
-                    description: "Something went wrong on the server.",
+                    description: "Xảy ra sự cố không mong muốn.",
                 });
                 break;
             default:

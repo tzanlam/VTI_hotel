@@ -1,0 +1,27 @@
+.main-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-header {
+    background-color: #003366;
+    color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+}
+
+.main-footer {
+    background-color: #003366;
+    color: #ffffff;
+    padding: 10px 20px;
+    text-align: center;
+}

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "antd": "^5.22.6",
+    "react-router-dom": "^7.1.1"
+  }
+}
