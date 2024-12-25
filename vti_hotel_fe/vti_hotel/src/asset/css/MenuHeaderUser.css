@@ -1,0 +1,10 @@
+.nav-menu ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .nav-menu ul li a:hover {
+    color: #1890ff; /* Màu xanh của Ant Design */
+  }
+  

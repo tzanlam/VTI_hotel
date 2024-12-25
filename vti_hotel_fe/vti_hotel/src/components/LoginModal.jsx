@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { Modal, Image, Form, Input, Button, Checkbox } from "antd";
-// import { useNavigate } from "react-router-dom";
+import { Modal, Image, Form, Input, Button, Checkbox, Dropdown, Avatar, Menu } from "antd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../asset/image/logo.jpg";
 import { MoreService } from "../service/MoreService";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 import "../asset/css/LoginModal.css";
+import avt_default from "../asset/image/avt_default.jpg"
+
 
 const LoginModal = () => {
-//   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
+  const [user, setUser] = useState(null);
 
   const handleOpenModal = () => setIsModalVisible(true);
   const handleCloseModal = () => setIsModalVisible(false);
@@ -20,10 +21,11 @@ const LoginModal = () => {
     try {
       const response = await MoreService.login(loginRequest);
       localStorage.setItem("token", response.data.token);
-      console.log(response);
-      
+      setUser({
+        fullName: response.data.fullName,
+        image: response.data.image || avt_default ,
+      });
       toast.success("Đăng nhập thành công");
-    //   navigate("/");
       handleCloseModal();
     } catch (error) {
       toast.error("Sai thông tin đăng nhập hoặc mật khẩu");
@@ -41,15 +43,45 @@ const LoginModal = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    toast.info("Đăng xuất thành công");
+  };
+
   const handleForgotPassword = () => {
     toast.info("Chức năng quên mật khẩu đang được phát triển");
   };
 
+  const userMenu = (
+    <Menu>
+      <Menu.Item key="1">
+        <a href="/profile">Thông tin cá nhân</a>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <a href="/myBooking">Lịch sử đặt phòng</a>
+      </Menu.Item>
+      <Menu.Item key="3">
+        <a href="/" onClick={handleLogout}>Đăng xuất</a>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <>
-      <Button type="primary" onClick={handleOpenModal}>
-        Đăng nhập
-      </Button>
+      {user ? (
+        <Dropdown overlay={userMenu} placement="bottomRight" trigger={["click"]}>
+          <div style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
+            <Avatar src={user.image} alt={user.fullName} style={{ marginRight: "8px" }} />
+            <span>{user.fullName}</span>
+          </div>
+        </Dropdown>
+      ) : (
+        <Button type="primary" onClick={handleOpenModal}>
+          Đăng nhập
+        </Button>
+      )}
+
       <Modal
         open={isModalVisible}
         title={isRegister ? "Đăng ký tài khoản" : "Đăng nhập"}
@@ -113,6 +145,7 @@ const LoginModal = () => {
           </Form>
         </div>
       </Modal>
+
       <ToastContainer />
     </>
   );

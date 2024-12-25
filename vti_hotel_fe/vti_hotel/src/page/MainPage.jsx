@@ -1,25 +1,32 @@
+// src/pages/MainPage.js
 import React from 'react';
 import LoginModal from '../components/LoginModal';
+import MenuUser from '../page/user/MenuUser';  // Import MenuUser
 import '../asset/css/MainPage.css';
-import { Footer } from 'antd/es/layout/layout';
+import { Layout } from 'antd';
+
+const { Header, Footer, Content } = Layout;
 
 const MainPage = () => {
-    return (
-        <div className="main-page">
-            {/* Header */}
-            <header className="main-header">
-                <h1>Huy Phương Hotel</h1>
-                <LoginModal />
-            </header>
 
-            {/* Content */}
-            <main className="main-content">
-                <p>Chào mừng đến với Huy Phương Hotel!</p>
-                <p>Hãy tận hưởng kỳ nghỉ tuyệt vời của bạn với dịch vụ đẳng cấp của chúng tôi.</p>
-            </main>
+  return (
+    <Layout className="main-page">
+      {/* Header */}
+      <Header className="main-header" style={{ background: "#003366" }}>
+        <h1 style={{ color: 'white' }}>Huy Phương Hotel</h1>
+        <MenuUser /> {/* Thêm MenuUser vào đây */}
+        {/* Hiển thị LoginModal */}
+        <LoginModal />
+      </Header>
 
-            {/* Footer */}
-            <Footer style={{ textAlign: "center" }}>
+      {/* Content */}
+      <Content className="main-content">
+        <p>Chào mừng đến với Huy Phương Hotel!</p>
+        <p>Hãy tận hưởng kỳ nghỉ tuyệt vời của bạn với dịch vụ đẳng cấp của chúng tôi.</p>
+      </Content>
+
+      {/* Footer */}
+      <Footer style={{ textAlign: 'center' }}>
         <h3>Vị trí khách sạn</h3>
         <div>
           <iframe
@@ -34,8 +41,8 @@ const MainPage = () => {
           ></iframe>
         </div>
       </Footer>
-        </div>
-    );
+    </Layout>
+  );
 };
 
 export default MainPage;
