@@ -7,6 +7,7 @@ import { MoreService } from "../service/MoreService";
 import { ToastContainer } from "react-toastify";
 import "../asset/css/LoginModal.css";
 import avt_default from "../asset/image/avt_default.jpg"
+import { Link } from "react-router-dom";
 
 
 const LoginModal = () => {
@@ -22,7 +23,6 @@ const LoginModal = () => {
       const response = await MoreService.login(loginRequest);
       localStorage.setItem("token", response.data.token);
       console.log(response);
-      
       setUser({
         fullName: response.data.identifier,
         image: response.data.image || avt_default ,
@@ -54,20 +54,24 @@ const LoginModal = () => {
   const handleForgotPassword = () => {
     toast.info("Chức năng quên mật khẩu đang được phát triển");
   };
-
   const userMenu = (
     <Menu>
-      <Menu.Item key="1">
-        <a href="/profile">Thông tin cá nhân</a>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <a href="/myBooking">Lịch sử đặt phòng</a>
-      </Menu.Item>
-      <Menu.Item key="3">
-        <a href="/" onClick={handleLogout}>Đăng xuất</a>
-      </Menu.Item>
+      {user && (
+        <>
+          <Menu.Item key="1">
+            <Link to="/myProfile">Thông tin cá nhân</Link>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Link to="/myBooking">Lịch sử đặt phòng</Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <a href="/" onClick={handleLogout}>Đăng xuất</a>
+          </Menu.Item>
+        </>
+      )}
     </Menu>
   );
+  
 
   return (
     <>

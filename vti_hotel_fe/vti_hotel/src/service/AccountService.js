@@ -6,7 +6,9 @@ export const AccountService = {
     },
     
     fetchAccountById(accountId){
-        return url.get(`findAccountById?accountId=${accountId}`)
+        return url.get(`findAccountById`, {
+            params: {accountId},
+        })
     },
 
     fetchAccountByEmail(email){

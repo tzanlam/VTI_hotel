@@ -4,6 +4,7 @@ import LoginModal from '../components/LoginModal';
 import MenuUser from '../page/user/MenuUser';  // Import MenuUser
 import '../asset/css/MainPage.css';
 import { Layout } from 'antd';
+import { Outlet } from 'react-router-dom';
 
 const { Header, Footer, Content } = Layout;
 
@@ -21,8 +22,7 @@ const MainPage = () => {
 
       {/* Content */}
       <Content className="main-content">
-        <p>Chào mừng đến với Huy Phương Hotel!</p>
-        <p>Hãy tận hưởng kỳ nghỉ tuyệt vời của bạn với dịch vụ đẳng cấp của chúng tôi.</p>
+        <Outlet/>
       </Content>
 
       {/* Footer */}

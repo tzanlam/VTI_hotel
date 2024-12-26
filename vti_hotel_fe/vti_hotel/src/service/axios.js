@@ -35,31 +35,31 @@ url.interceptors.response.use(
             return Promise.reject({ message: "Network error or server not reachable." });
         }
 
-        switch (error.response.status) {
-            case 401:
-                notification.error({
-                    message: "Unauthorized",
-                    description: "Không đủ quyền hạn truy cập.",
-                });
-                break;
-            case 403:
-                notification.error({
-                    message: "Forbidden",
-                    description: "Bạn không có quyền truy cập.",
-                });
-                break;
-            case 500:
-                notification.error({
-                    message: "Server Error",
-                    description: "Xảy ra sự cố không mong muốn.",
-                });
-                break;
-            default:
-                notification.error({
-                    message: `Error ${error.response.status}`,
-                    description: error.response.data?.message || "An error occurred.",
-                });
-        }
+        // switch (error.response.status) {
+            // case 401:
+            //     notification.error({
+            //         message: "Unauthorized",
+            //         description: "Không đủ quyền hạn truy cập.",
+            //     });
+            //     break;
+            // case 403:
+            //     notification.error({
+            //         message: "Forbidden",
+            //         description: "Bạn không có quyền truy cập.",
+            //     });
+            //     break;
+            // case 500:
+            //     notification.error({
+            //         message: "Server Error",
+            //         description: "Xảy ra sự cố không mong muốn.",
+            //     });
+            //     break;
+        //     default:
+        //         notification.error({
+        //             message: `Error ${error.response.status}`,
+        //             description: error.response.data?.message || "An error occurred.",
+        //         });
+        // }
         return Promise.reject(error);
     }
 );
