@@ -21,8 +21,10 @@ const LoginModal = () => {
     try {
       const response = await MoreService.login(loginRequest);
       localStorage.setItem("token", response.data.token);
+      console.log(response);
+      
       setUser({
-        fullName: response.data.fullName,
+        fullName: response.data.identifier,
         image: response.data.image || avt_default ,
       });
       toast.success("Đăng nhập thành công");

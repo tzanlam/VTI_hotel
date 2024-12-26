@@ -12,5 +12,5 @@ public interface IGlobalService {
     AuthResponse login(LoginRequest request);
 
     // upload
-    UploadResponse upload(MultipartFile path) throws IOException;
+    UploadResponse upload(MultipartFile path, String folder) throws IOException;
 }

@@ -57,8 +57,8 @@ public class AccountController {
         }
     }
 
-    @PutMapping("/updateAccount")
-    public ResponseEntity<?> updateAccount(@RequestParam("accountId") int id, @RequestBody AccountRequest request){
+    @PutMapping(value = "/updateAccount")
+    public ResponseEntity<?> updateAccount(@RequestParam("accountId") int id, AccountRequest request){
         try{
             return new ResponseEntity<>(accountService.updateAccount(id, request), HttpStatus.OK);
         }catch(Exception e){

@@ -4,6 +4,7 @@ import hotel.vti_hotel.modal.request.AccountRequest;
 import hotel.vti_hotel.modal.response.dto.AccountDTO;
 import jakarta.mail.MessagingException;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IAccountService {
@@ -13,10 +14,10 @@ public interface IAccountService {
     AccountDTO findAccountByEmail(String email);
 
     // create
-    AccountDTO createAccount(AccountRequest request);
+    AccountDTO createAccount(AccountRequest request) throws IOException;
     AccountDTO registerAccount(AccountRequest request) throws MessagingException;
     AccountDTO confirmAccount(String email, String password, String confirmationCode);
 
     // update
-    AccountDTO updateAccount(int id, AccountRequest request);
+    AccountDTO updateAccount(int id, AccountRequest request) throws IOException;
 }

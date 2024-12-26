@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -47,7 +48,7 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public AccountDTO createAccount(AccountRequest request) {
+    public AccountDTO createAccount(AccountRequest request) throws IOException {
         Account account = request.createAccountByAdmin();
         accountRepository.save(account);
         return new AccountDTO(account);
@@ -86,7 +87,7 @@ public class AccountService implements IAccountService {
         }
 
     @Override
-    public AccountDTO updateAccount(int id, AccountRequest request) {
+    public AccountDTO updateAccount(int id, AccountRequest request) throws IOException {
         Account account = accountRepository.findById(id).orElseThrow(()-> new NullPointerException("Account not found"));
         if (Objects.nonNull(account)) {
             request.updateAccount(account);

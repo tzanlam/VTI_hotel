@@ -11,5 +11,6 @@ import java.util.Collection;
 public class AuthResponse {
     private String token;
     private String identifier;
+    private String image;
     private Collection<? extends GrantedAuthority> authorities;
 }

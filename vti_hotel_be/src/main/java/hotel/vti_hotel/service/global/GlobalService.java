@@ -3,9 +3,11 @@ package hotel.vti_hotel.service.global;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import hotel.vti_hotel.config.jwt.JwtTokenUtil;
+import hotel.vti_hotel.modal.entity.Account;
 import hotel.vti_hotel.modal.request.LoginRequest;
 import hotel.vti_hotel.modal.response.AuthResponse;
 import hotel.vti_hotel.modal.response.UploadResponse;
+import hotel.vti_hotel.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,6 +31,9 @@ public class GlobalService implements IGlobalService {
     @Autowired
     private Cloudinary cloudinary;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     @Override
     public AuthResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
@@ -36,19 +41,24 @@ public class GlobalService implements IGlobalService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String identifier = userDetails.getUsername();
+        Account account = accountRepository.findByIdentifier(identifier)
+                .orElseThrow(() -> new IllegalArgumentException("Identifier not found"));
         String token = jwtTokenUtil.generateToken(userDetails);
-        return new AuthResponse(token, request.getIdentifier(), userDetails.getAuthorities());
+        return new AuthResponse(token, request.getIdentifier(),account.getImageCard(), userDetails.getAuthorities());
     }
 
     @Override
-    public UploadResponse upload(MultipartFile path) throws IOException {
+    public UploadResponse upload(MultipartFile path, String folder) throws IOException {
         if (path == null || path.isEmpty()) {
             throw new IllegalArgumentException("File is empty or null.");
         }
 
+        String fullFolderPath = "/vti_hotel/" + folder;
+
         Map result = cloudinary.uploader().upload(
                 path.getBytes(),
-                ObjectUtils.asMap("folder", "/vti_hotel")
+                ObjectUtils.asMap("folder", fullFolderPath)
         );
 
         UploadResponse response = new UploadResponse();

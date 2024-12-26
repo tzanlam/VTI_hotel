@@ -3,10 +3,12 @@ package hotel.vti_hotel.controller;
 import hotel.vti_hotel.modal.request.LoginRequest;
 import hotel.vti_hotel.service.global.IGlobalService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import java.io.IOException;
 
@@ -28,11 +30,13 @@ public class GlobalController {
             }
         }
 
-    @PostMapping("/upImage")
+    @PostMapping(value = "/upImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public ResponseEntity<?> upToCloudinary(@RequestBody MultipartFile file){
+    public ResponseEntity<?> upToCloudinary(
+             MultipartFile file,
+             String folder){
         try{
-            return ResponseEntity.ok(globalService.upload(file));
+            return ResponseEntity.ok(globalService.upload(file, folder));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: "+e.getMessage());
         }
