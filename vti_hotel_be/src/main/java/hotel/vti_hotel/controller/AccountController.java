@@ -3,6 +3,7 @@ package hotel.vti_hotel.controller;
 import hotel.vti_hotel.modal.request.AccountRequest;
 import hotel.vti_hotel.service.account.IAccountService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +58,7 @@ public class AccountController {
         }
     }
 
-    @PutMapping(value = "/updateAccount")
+    @PutMapping(value = "/updateAccount", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAccount(@RequestParam("accountId") int id, AccountRequest request){
         try{
             return new ResponseEntity<>(accountService.updateAccount(id, request), HttpStatus.OK);

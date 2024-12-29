@@ -5,6 +5,7 @@ import com.cloudinary.utils.ObjectUtils;
 import hotel.vti_hotel.config.jwt.JwtTokenUtil;
 import hotel.vti_hotel.modal.entity.Account;
 import hotel.vti_hotel.modal.request.LoginRequest;
+import hotel.vti_hotel.modal.request.UploadRequest;
 import hotel.vti_hotel.modal.response.AuthResponse;
 import hotel.vti_hotel.modal.response.UploadResponse;
 import hotel.vti_hotel.repository.AccountRepository;
@@ -45,19 +46,19 @@ public class GlobalService implements IGlobalService {
         Account account = accountRepository.findByIdentifier(identifier)
                 .orElseThrow(() -> new IllegalArgumentException("Identifier not found"));
         String token = jwtTokenUtil.generateToken(userDetails);
-        return new AuthResponse(token, request.getIdentifier(),account.getImageCard(), userDetails.getAuthorities());
+        return new AuthResponse(String.valueOf(account.getId()) ,token, request.getIdentifier(),account.getImageCard(), userDetails.getAuthorities());
     }
 
     @Override
-    public UploadResponse upload(MultipartFile path, String folder) throws IOException {
-        if (path == null || path.isEmpty()) {
+    public UploadResponse upload(UploadRequest request) throws IOException {
+        if (request.getFile() == null || request.getFile().isEmpty()) {
             throw new IllegalArgumentException("File is empty or null.");
         }
 
-        String fullFolderPath = "/vti_hotel/" + folder;
+        String fullFolderPath = "/vti_hotel/" + request.getFolder();
 
         Map result = cloudinary.uploader().upload(
-                path.getBytes(),
+                request.getFile().getBytes(),
                 ObjectUtils.asMap("folder", fullFolderPath)
         );
 

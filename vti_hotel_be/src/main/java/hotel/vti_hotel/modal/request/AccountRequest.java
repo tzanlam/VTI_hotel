@@ -49,7 +49,12 @@ public class AccountRequest {
     }
 
     public void updateAccount(Account account){
-        populateAccount(account);
+        account.setFullName(fullName);
+        account.setEmail(email);
+        account.setPhoneNumber(phoneNumber);
+        account.setBirthDate(convertToLocalDate(birthDate));
+        account.setImageCard(imageCard);
+        account.setGender(convertToEnum(Account.Gender.class, gender));
     }
     private void populateAccount(Account account) {
         account.setFullName(fullName);

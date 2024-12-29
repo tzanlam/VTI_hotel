@@ -9,6 +9,7 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 public class AuthResponse {
+    private String accountId;
     private String token;
     private String identifier;
     private String image;
