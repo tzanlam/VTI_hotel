@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "../asset/css/LoginModal.css";
 import avt_default from "../asset/image/avt_default.jpg"
 import { Link } from "react-router-dom";
+import { AccountService } from "../service/AccountService";
 
 
 const LoginModal = () => {
@@ -22,11 +23,15 @@ const LoginModal = () => {
     try {
       const response = await MoreService.login(loginRequest);
       localStorage.setItem("token", response.data.token);
-      console.log(response);
+      const accountData = await AccountService.fetchAccountById(response.data.accountId);
+      if (accountData) {
       setUser({
+        accountId: response.data.accountId,
         fullName: response.data.identifier,
-        image: response.data.image || avt_default ,
+        image: accountData.data.imageCard || avt_default ,
       });
+      }
+      localStorage.setItem("user", JSON.stringify(accountData))
       toast.success("Đăng nhập thành công");
       handleCloseModal();
     } catch (error) {
@@ -59,7 +64,7 @@ const LoginModal = () => {
       {user && (
         <>
           <Menu.Item key="1">
-            <Link to="/myProfile">Thông tin cá nhân</Link>
+          <Link to={`/myProfile/${user?.accountId}`}>Thông tin cá nhân</Link>
           </Menu.Item>
           <Menu.Item key="2">
             <Link to="/myBooking">Lịch sử đặt phòng</Link>
@@ -78,7 +83,10 @@ const LoginModal = () => {
       {user ? (
         <Dropdown overlay={userMenu} placement="bottomRight" trigger={["click"]}>
           <div style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
-            <Avatar src={user.image} alt={user.fullName} style={{ marginRight: "8px" }} />
+            <Avatar 
+            src={user.image} 
+            alt={user.fullName} 
+            style={{ marginRight: "8px" }} />
             <span>{user.fullName}</span>
           </div>
         </Dropdown>
