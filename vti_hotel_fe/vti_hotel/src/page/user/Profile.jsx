@@ -20,9 +20,7 @@ const Profile = () => {
         const response = await AccountService.fetchAccountById(accountId);
         if (response) {
             console.log(response);
-            
           setAccount(response.data);
-          toast.success("Xem thông tin cá nhân thành công");
         } else {
           toast.error("Có lỗi xảy ra");
         }
@@ -34,7 +32,7 @@ const Profile = () => {
       }
     };
 
-    fetchAccount(); // Gọi hàm fetchAccount
+    fetchAccount();
   }, [accountId]);
 
   if (loading) {
@@ -48,6 +46,8 @@ const Profile = () => {
   const handleUpdateSuccess = (accountRequest) => {
     setAccount(accountRequest)
     setIsModalVisible(false);
+    toast.success("Thông tin đã được cập nhật")
+    // window.location.reload()
   }
   return (
     <Card style={{ maxWidth: 600, margin: "20px auto", padding: 20, borderRadius: 10 }}>
