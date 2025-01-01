@@ -46,7 +46,6 @@ const Profile = () => {
   const handleUpdateSuccess = (accountRequest) => {
     setAccount(accountRequest)
     setIsModalVisible(false);
-    toast.success("Thông tin đã được cập nhật")
     // window.location.reload()
   }
   return (
@@ -91,6 +90,7 @@ const Profile = () => {
         </Col>
         <Col span={12}>
           <Text>{account.email}</Text>
+          {/* <Button onClick={}/> */}
         </Col>
   
         <Col span={12}>

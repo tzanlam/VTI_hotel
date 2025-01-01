@@ -1,10 +1,9 @@
 import { Button, DatePicker, Form, Input, Modal, Select, Upload } from "antd";
 import React, { useState } from "react";
+import dayjs from "dayjs"; // Sử dụng thư viện dayjs
 import { AccountService } from "../service/AccountService";
-import moment from "moment";
 import { toast } from "react-toastify";
 import { UploadOutlined } from "@ant-design/icons";
-import { Option } from "antd/es/mentions";
 import { MoreService } from "../service/MoreService";
 
 const UpdateAccountModal = ({ open, onClose, onSuccess, account }) => {
@@ -14,23 +13,29 @@ const UpdateAccountModal = ({ open, onClose, onSuccess, account }) => {
 
   const handleUpload = async (file) => {
     const formData = new FormData();
-    const folder = "image_card";
-    formData.append("folder", folder);
+    formData.append("folder", "image_card");
     formData.append("file", file);
+
     try {
       setLoading(true);
       const response = await MoreService.uploadImage(formData);
       return response.data.url;
     } catch (error) {
-      toast.error("Xảy ra lỗi không mong muốn");
+      toast.error("Xảy ra lỗi không mong muốn khi tải ảnh lên.");
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSubmit = async (accountRequest) => {
+  const handleSubmit = async (values) => {
     try {
       setLoading(true);
+
+      // Chuyển đổi ngày sinh từ DatePicker về chuỗi định dạng "YYYY-MM-DD"
+      const birthDate = values.birthDate
+        ? values.birthDate.format("YYYY-MM-DD")
+        : null;
 
       // Giữ lại URL ảnh cũ nếu không có ảnh mới
       let imageUrl = account?.imageCard;
@@ -38,23 +43,22 @@ const UpdateAccountModal = ({ open, onClose, onSuccess, account }) => {
         imageUrl = await handleUpload(image);
       }
 
-      const updateValues = { ...accountRequest, imageCard: imageUrl };
+      const updateValues = { ...values, birthDate, imageCard: imageUrl };
 
       const response = await AccountService.updateAccount(
         account.accountId,
         updateValues
       );
 
-      if (response) {
-        toast.success("Bạn đã cập nhật tài khoản thành công");
+      if (response?.data) {
+        toast.success("Cập nhật tài khoản thành công.");
         onSuccess(response.data);
         onClose();
       } else {
-        toast.error("Cập nhật thông tin thất bại");
-        onClose();
+        toast.error("Cập nhật tài khoản thất bại.");
       }
     } catch (error) {
-      toast.error("Xảy ra lỗi không xác định");
+      toast.error("Xảy ra lỗi không xác định.");
     } finally {
       setLoading(false);
     }
@@ -71,12 +75,13 @@ const UpdateAccountModal = ({ open, onClose, onSuccess, account }) => {
         form={form}
         layout="vertical"
         initialValues={{
-          fullName: account?.fullName,
-          email: account?.email,
-          phoneNumber: account?.phoneNumber,
-          birthDate: account?.birthDate ? moment(account.birthDate) : null,
-          gender: account?.gender,
-          imageCard: account?.imageCard,
+          fullName: account?.fullName || "",
+          email: account?.email || "",
+          phoneNumber: account?.phoneNumber || "",
+          birthDate: account?.birthDate
+            ? dayjs(account.birthDate) // Chuyển đổi sang đối tượng dayjs
+            : null,
+          gender: account?.gender || "MALE",
         }}
         onFinish={handleSubmit}
       >
@@ -91,7 +96,10 @@ const UpdateAccountModal = ({ open, onClose, onSuccess, account }) => {
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ required: true, message: "Vui lòng nhập email!" }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập email!" },
+            { type: "email", message: "Email không hợp lệ!" },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -107,7 +115,7 @@ const UpdateAccountModal = ({ open, onClose, onSuccess, account }) => {
         <Form.Item
           label="Ngày sinh"
           name="birthDate"
-          rules={[{ required: true, message: "Vui lòng nhập ngày sinh!" }]}
+          rules={[{ required: true, message: "Vui lòng chọn ngày sinh!" }]}
         >
           <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
@@ -118,16 +126,16 @@ const UpdateAccountModal = ({ open, onClose, onSuccess, account }) => {
           rules={[{ required: true, message: "Vui lòng chọn giới tính!" }]}
         >
           <Select>
-            <Option value="MALE">Nam</Option>
-            <Option value="FEMALE">Nữ</Option>
+            <Select.Option value="MALE">Nam</Select.Option>
+            <Select.Option value="FEMALE">Nữ</Select.Option>
           </Select>
         </Form.Item>
 
-        <Form.Item label="Ảnh mới" name="imageCard">
+        <Form.Item label="Ảnh mới">
           <Upload
             beforeUpload={(file) => {
               setImage(file);
-              return false; // Prevent auto upload
+              return false; // Ngăn tải ảnh tự động
             }}
             maxCount={1}
           >
