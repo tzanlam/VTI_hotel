@@ -58,8 +58,9 @@ public class AccountController {
         }
     }
 
-    @PutMapping(value = "/updateAccount", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAccount(@RequestParam("accountId") int id, AccountRequest request){
+    @PutMapping(value = "/updateAccount")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public ResponseEntity<?> updateAccount(@RequestParam("accountId") int id, @RequestBody AccountRequest request){
         try{
             return new ResponseEntity<>(accountService.updateAccount(id, request), HttpStatus.OK);
         }catch(Exception e){
