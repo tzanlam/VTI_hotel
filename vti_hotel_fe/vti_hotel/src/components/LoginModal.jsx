@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Image, Form, Input, Button, Checkbox, Dropdown, Avatar, Menu } from "antd";
+import { Modal, Image, Form, Input, Button, Checkbox, Dropdown, Avatar } from "antd";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../asset/image/logo.jpg";
@@ -9,7 +9,6 @@ import "../asset/css/LoginModal.css";
 import avt_default from "../asset/image/avt_default.jpg"
 import { Link } from "react-router-dom";
 import { AccountService } from "../service/AccountService";
-
 
 const LoginModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -59,29 +58,32 @@ const LoginModal = () => {
   const handleForgotPassword = () => {
     toast.info("Chức năng quên mật khẩu đang được phát triển");
   };
-  const userMenu = (
-    <Menu>
-      {user && (
-        <>
-          <Menu.Item key="1">
-          <Link to={`/myProfile/${user?.accountId}`}>Thông tin cá nhân</Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="/myBooking">Lịch sử đặt phòng</Link>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <a href="/" onClick={handleLogout}>Đăng xuất</a>
-          </Menu.Item>
-        </>
-      )}
-    </Menu>
-  );
-  
+
+  const userMenuItems = [
+    {
+      key: "1",
+      label: <Link to = {`/myProfile/${user?.accountId}`}>Thông tin cá nhân</Link>
+    },
+    {
+      key: "2",
+      label: <Link to = "/myBooking">Lịch sử đặt phòng</Link>
+    },
+    // {
+    //   key: "3",
+    //   label: <Link to = "/updateEmail">Thay đổi tài khoản email</Link>
+    // },
+    {
+      key: "3",
+      label: <a href="/" onClick={handleLogout}>Đăng xuất</a>
+    }
+  ]
+
+  const userMenu = {items: userMenuItems} 
 
   return (
     <>
       {user ? (
-        <Dropdown overlay={userMenu} placement="bottomRight" trigger={["click"]}>
+        <Dropdown menu={userMenu} placement="bottomRight" trigger={["click"]}>
           <div style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
             <Avatar 
             src={user.image} 
