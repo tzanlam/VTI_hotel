@@ -13,38 +13,53 @@ const UpdateAccountModal = ({ open, onClose, onSuccess, account }) => {
   const [image, setImage] = useState(null);
 
   const handleUpload = async (file) => {
+    const formData = new FormData();
     const folder = "image_card";
+    formData.append("folder", folder);
+    formData.append("file", file);
     try {
       setLoading(true);
-      const response = await MoreService.uploadImage(file, folder);
-      console.log(response);
-      
-      toast.success("chọn ảnh thành công");
+      const response = await MoreService.uploadImage(formData);
+      return response.data.url;
     } catch (error) {
       toast.error("Xảy ra lỗi không mong muốn");
     } finally {
       setLoading(false);
     }
   };
+
   const handleSubmit = async (accountRequest) => {
     try {
       setLoading(true);
-      accountRequest.imageCard = image;
-      const response = AccountService.updateAccount(
+
+      // Giữ lại URL ảnh cũ nếu không có ảnh mới
+      let imageUrl = account?.imageCard;
+      if (image) {
+        imageUrl = await handleUpload(image);
+      }
+
+      const updateValues = { ...accountRequest, imageCard: imageUrl };
+
+      const response = await AccountService.updateAccount(
         account.accountId,
-        accountRequest
+        updateValues
       );
+
       if (response) {
         toast.success("Bạn đã cập nhật tài khoản thành công");
+        onSuccess(response.data);
+        onClose();
       } else {
         toast.error("Cập nhật thông tin thất bại");
+        onClose();
       }
-    } catch {
-      toast.error("xảy ra lỗi không xác định");
+    } catch (error) {
+      toast.error("Xảy ra lỗi không xác định");
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <Modal
       title="Cập nhật tài khoản"
@@ -108,23 +123,16 @@ const UpdateAccountModal = ({ open, onClose, onSuccess, account }) => {
           </Select>
         </Form.Item>
 
-        <Form.Item label="Ảnh thẻ" name="imageCard">
+        <Form.Item label="Ảnh mới" name="imageCard">
           <Upload
-            showUploadList={false}
             beforeUpload={(file) => {
-              handleUpload(file);
+              setImage(file);
               return false; // Prevent auto upload
             }}
+            maxCount={1}
           >
             <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
           </Upload>
-          {image && (
-            <img
-              src={image}
-              alt="Ảnh thẻ"
-              style={{ width: "100px", marginTop: "10px" }}
-            />
-          )}
         </Form.Item>
 
         <Form.Item>
