@@ -7,11 +7,12 @@ import hotel.vti_hotel.modal.response.UploadResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 public interface IGlobalService {
     // login
     AuthResponse login(LoginRequest request);
 
     // upload
-    UploadResponse upload(UploadRequest request) throws IOException;
+    UploadResponse upload(UploadRequest request) throws IOException, NoSuchAlgorithmException;
 }
