@@ -48,7 +48,7 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public AccountDTO createAccount(AccountRequest request) throws IOException {
+    public AccountDTO createAccount(AccountRequest request) throws Exception {
         Account account = request.createAccountByAdmin();
         accountRepository.save(account);
         return new AccountDTO(account);
@@ -87,7 +87,7 @@ public class AccountService implements IAccountService {
         }
 
     @Override
-    public AccountDTO updateAccount(int id, AccountRequest request) throws IOException {
+    public AccountDTO updateAccount(int id, AccountRequest request) throws Exception {
         Account account = accountRepository.findById(id).orElseThrow(()-> new NullPointerException("Account not found"));
         if (Objects.nonNull(account)) {
             request.updateAccount(account);

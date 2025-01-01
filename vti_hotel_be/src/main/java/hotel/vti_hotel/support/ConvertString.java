@@ -7,13 +7,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class ConvertString {
-    public static LocalDate convertToLocalDate(String dateString) {
+    public static LocalDate convertToLocalDate(String dateString) throws Exception {
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             return LocalDate.parse(dateString, dateFormatter);
         } catch (DateTimeParseException e) {
-            System.out.println("định dạng thời gian không hợp lệ");
-            return null;
+            throw new Exception("định dạng thời gian không hợp lệ");
         }
     }
 

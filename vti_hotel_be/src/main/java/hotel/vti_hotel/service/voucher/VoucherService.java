@@ -48,14 +48,14 @@ public class VoucherService implements IVoucherService {
     }
 
     @Override
-    public VoucherDTO createNewVoucher(VoucherRequest request) {
+    public VoucherDTO createNewVoucher(VoucherRequest request) throws Exception {
         Voucher voucher = request.createVoucher();
         voucherRepository.save(voucher);
         return new VoucherDTO(voucher);
     }
 
     @Override
-    public VoucherDTO updateVoucher(int id, VoucherRequest request) {
+    public VoucherDTO updateVoucher(int id, VoucherRequest request) throws Exception {
         Voucher voucher = voucherRepository.findById(id).orElseThrow(()-> new NullPointerException("Voucher not found"));
         if (Objects.nonNull(voucher)){
             request.updateVoucher(voucher);

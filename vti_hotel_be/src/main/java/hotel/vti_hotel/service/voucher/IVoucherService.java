@@ -13,10 +13,10 @@ public interface IVoucherService {
     List<VoucherDTO> getVoucherActive();
 
     // create
-    VoucherDTO createNewVoucher(VoucherRequest request);
+    VoucherDTO createNewVoucher(VoucherRequest request) throws Exception;
 
     // update
-    VoucherDTO updateVoucher(int id, VoucherRequest request);
+    VoucherDTO updateVoucher(int id, VoucherRequest request) throws Exception;
 
     // change status
     VoucherDTO changeStatusVoucher(int id);

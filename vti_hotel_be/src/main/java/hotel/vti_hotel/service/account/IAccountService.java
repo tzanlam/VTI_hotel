@@ -14,10 +14,10 @@ public interface IAccountService {
     AccountDTO findAccountByEmail(String email);
 
     // create
-    AccountDTO createAccount(AccountRequest request) throws IOException;
+    AccountDTO createAccount(AccountRequest request) throws Exception;
     AccountDTO registerAccount(AccountRequest request) throws MessagingException;
     AccountDTO confirmAccount(String email, String password, String confirmationCode);
 
     // update
-    AccountDTO updateAccount(int id, AccountRequest request) throws IOException;
+    AccountDTO updateAccount(int id, AccountRequest request) throws Exception;
 }

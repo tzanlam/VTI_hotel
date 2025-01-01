@@ -36,7 +36,7 @@ public class AccountRequest {
         return account;
     }
 
-    public Account createAccountByAdmin(){
+    public Account createAccountByAdmin() throws Exception {
         Account account = new Account();
         account.setUsername(username);
         account.setLevel(convertToEnum(Account.Level.class, level));
@@ -48,7 +48,7 @@ public class AccountRequest {
         return account;
     }
 
-    public void updateAccount(Account account){
+    public void updateAccount(Account account) throws Exception {
         account.setFullName(fullName);
         account.setEmail(email);
         account.setPhoneNumber(phoneNumber);
@@ -56,7 +56,7 @@ public class AccountRequest {
         account.setImageCard(imageCard);
         account.setGender(convertToEnum(Account.Gender.class, gender));
     }
-    private void populateAccount(Account account) {
+    private void populateAccount(Account account) throws Exception {
         account.setFullName(fullName);
         account.setPassword(password);
         account.setEmail(email);

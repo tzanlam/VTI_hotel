@@ -14,18 +14,18 @@ public class VoucherRequest {
     private int quantity;
     private String status;
 
-    public Voucher createVoucher() {
+    public Voucher createVoucher() throws Exception {
         Voucher voucher = new Voucher();
         populate(voucher);
         voucher.setStatus(Voucher.StatusVoucher.INACTIVE);
         return voucher;
     }
 
-    public void updateVoucher(Voucher voucher) {
+    public void updateVoucher(Voucher voucher) throws Exception {
         populate(voucher);
     }
 
-    private void populate(Voucher voucher) {
+    private void populate(Voucher voucher) throws Exception {
         voucher.setName(name);
         voucher.setDiscount(Double.parseDouble(discount));
         voucher.setExpiry(convertToLocalDate(expiry));
