@@ -24,6 +24,6 @@ export const AccountService = {
     },
 
     register(accountRequest){
-        return url.put("register", accountRequest)
+        return url.post("register", accountRequest)
     }
 }

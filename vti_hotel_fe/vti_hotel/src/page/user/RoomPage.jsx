@@ -2,22 +2,17 @@ import React, { useEffect, useState } from "react";
 import { RoomService } from "../../service/RoomService";
 import { Button, Card, Modal, Spin, Alert } from "antd";
 import "../../asset/css/RoomPage.css";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const RoomPage = () => {
   const [rooms, setRooms] = useState([]);
   const [selectRoom, setSelectRoom] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Sử dụng hook useNavigate
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    setIsLoggedIn(!!user);
-  }, []);
-
-  useEffect(() => {
-    // Fetch rooms data
     RoomService.fetchRooms()
       .then((response) => {
         if (response.data) {
@@ -26,7 +21,7 @@ const RoomPage = () => {
           setError("Không có dữ liệu phòng.");
         }
       })
-      .catch((err) => {
+      .catch(() => {
         setError("Lỗi khi tải dữ liệu phòng.");
       })
       .finally(() => {
@@ -34,7 +29,6 @@ const RoomPage = () => {
       });
   }, []);
 
-  // Xử lý khi click vào card phòng
   const handleCardClick = (roomId) => {
     setLoading(true);
     RoomService.fetchRoomById(roomId)
@@ -42,7 +36,7 @@ const RoomPage = () => {
         setSelectRoom(response.data);
         setIsModalVisible(true);
       })
-      .catch((err) => {
+      .catch(() => {
         setError("Lỗi khi tải chi tiết phòng.");
       })
       .finally(() => {
@@ -50,10 +44,14 @@ const RoomPage = () => {
       });
   };
 
-  // Đóng modal và reset dữ liệu phòng đã chọn
   const handleCloseModal = () => {
     setIsModalVisible(false);
     setSelectRoom(null);
+  };
+
+  // Chuyển hướng sang BookingPage với roomId và roomName
+  const handleBookingRedirect = (roomId, roomName) => {
+    navigate("/booking", { state: { roomId, roomName } });
   };
 
   return (
@@ -103,15 +101,22 @@ const RoomPage = () => {
             style={{ width: "100%", marginBottom: "16px" }}
           />
           <h4>Giới thiệu chung: {selectRoom.description}</h4>
-          <p><h5>Giá ngày:</h5> {selectRoom.priceDay} VND</p>
-          <p><h5>Giá đêm:</h5> {selectRoom.priceNight} VND</p>
+          <p>
+            <h5>Giá ngày:</h5> {selectRoom.priceDay} VND
+          </p>
+          <p>
+            <h5>Giá đêm:</h5> {selectRoom.priceNight} VND
+          </p>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            {!isLoggedIn ? (
-              <Button type="primary">Đặt phòng nhanh</Button>
-            ) : (
-              <Button type="primary">Đặt phòng với ưu đãi</Button>
-            )}
+            <Button
+              type="primary"
+              onClick={() =>
+                handleBookingRedirect(selectRoom.roomId, selectRoom.roomName)
+              }
+            >
+              Đặt phòng
+            </Button>
           </div>
         </Modal>
       )}

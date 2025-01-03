@@ -4,11 +4,13 @@ import LoginModal from '../components/LoginModal';
 import MenuUser from '../page/user/MenuUser';  // Import MenuUser
 import '../asset/css/MainPage.css';
 import { Layout } from 'antd';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import main_img from '../asset/image/main_img.png'
 
 const { Header, Footer, Content } = Layout;
 
 const MainPage = () => {
+  const location = useLocation()
 
   return (
     <Layout className="main-page">
@@ -22,7 +24,16 @@ const MainPage = () => {
 
       {/* Content */}
       <Content className="main-content">
-        <Outlet/>
+        {location.pathname === '/' ? (        
+          <div className='main-image-container'>
+            <img
+            src={main_img}
+            alt='WELCOME TO HUY PHƯƠNG HOTEL'
+            style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+            />
+          </div>
+          ):(<Outlet/>)
+          }
       </Content>
 
       {/* Footer */}
