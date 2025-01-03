@@ -22,8 +22,9 @@ public class BookingDTO {
         this.typeBooking = booking.getTypeBooking().toString();
         this.checkIn = String.valueOf(booking.getCheckIn());
         this.checkOut = String.valueOf(booking.getCheckOut());
-        this.voucher = String.valueOf(new VoucherDTO(booking.getVoucher()));
+        this.voucher = (booking.getVoucher() != null) ? String.valueOf(new VoucherDTO(booking.getVoucher())) : null;
         this.totalPrice = String.valueOf(booking.getTotalPrice());
         this.bookingStatus = booking.getStatus().toString();
     }
+
 }

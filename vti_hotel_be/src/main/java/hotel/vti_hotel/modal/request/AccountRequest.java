@@ -27,12 +27,17 @@ public class AccountRequest {
         Account account = new Account();
         account.setUsername(username);
         account.setPassword(password);
+        account.setFullName(null);
+        account.setGender(null);
+        account.setImageCard(null);
         account.setEmail(email);
         account.setPhoneNumber(phoneNumber);
+        account.setBirthDate(null);
         account.setLevel(Account.Level.NEW_CUSTOMER);
         account.setAmountSpent(0);
         account.setCumulativePoints(0);
         account.setStatus(Account.StatusAccount.PENDING);
+        account.setRole(Account.Role.USER);
         return account;
     }
 
