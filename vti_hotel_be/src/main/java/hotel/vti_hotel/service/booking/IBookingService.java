@@ -12,8 +12,8 @@ public interface IBookingService {
     List<BookingDTO> readBookingsByName(String name);
 
     // create
-    BookingDTO createBooking(BookingRequest request);
+    BookingDTO createBooking(BookingRequest request) throws Exception;
 
     // update
-    BookingDTO updateBooking(int id,BookingRequest request);
+    BookingDTO updateBooking(int id,BookingRequest request) throws Exception;
 }
