@@ -76,6 +76,7 @@ public class SecurityConfig {
 
                                 // more
                                 ,"/hotel/login"
+                                ,"/hotel/sendMail"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilterRequest, UsernamePasswordAuthenticationFilter.class);

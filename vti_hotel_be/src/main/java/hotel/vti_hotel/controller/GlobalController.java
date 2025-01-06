@@ -3,6 +3,8 @@ package hotel.vti_hotel.controller;
 import hotel.vti_hotel.modal.request.LoginRequest;
 import hotel.vti_hotel.modal.request.UploadRequest;
 import hotel.vti_hotel.service.global.IGlobalService;
+import hotel.vti_hotel.service.mailSender.IMailSender;
+import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +20,10 @@ import java.security.NoSuchAlgorithmException;
 @RequestMapping("/hotel")
 public class GlobalController {
     private final IGlobalService globalService;
-    public GlobalController(IGlobalService globalService) {
+    private final IMailSender mailSender;
+    public GlobalController(IGlobalService globalService, IMailSender mailSender) {
         this.globalService = globalService;
+        this.mailSender = mailSender;
     }
 
         @PostMapping("/login")
@@ -41,6 +45,19 @@ public class GlobalController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: "+e.getMessage());
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/sendMail")
+    public ResponseEntity<?> sendMailSupported(
+            @RequestParam String email,
+            @RequestParam String subject,
+            @RequestParam String body
+    ){
+        try{
+            return ResponseEntity.ok(mailSender.mailUserComplain(email, subject, body));
+        } catch (MessagingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't send mail: "+e.getMessage());
         }
     }
 }
