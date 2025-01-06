@@ -10,5 +10,8 @@ export const MoreService = {
                 'Content-Type': 'multipart/form-data'
             }
         })
+    },
+    sendMailSupported(email, subject, body){
+        return url.post(`sendMail?email=${email}&subject=${subject}&body=${body}`)
     }
 }
