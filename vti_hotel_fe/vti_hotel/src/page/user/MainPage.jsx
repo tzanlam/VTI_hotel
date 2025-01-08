@@ -6,17 +6,19 @@ import '../../asset/css/MainPage.css';
 import { Layout } from 'antd';
 import { Outlet, useLocation } from 'react-router-dom';
 import main_img from '../../asset/image/main_img.png'
+import MenuAdmin from '../admin/MenuAdmin';
 
 const { Header, Footer, Content } = Layout;
 
 const MainPage = () => {
   const location = useLocation()
+  const role = localStorage.getItem("role")
   return (
     <Layout className="main-page">
       {/* Header */}
       <Header className="main-header" style={{ background: "#003366" }}>
         <h1 style={{ color: 'white' }}>Huy Phương Hotel</h1>
-        <MenuUser />
+        {role ? (role === "ADMIN" ? <MenuAdmin />:<MenuUser/>): <MenuUser/>}
         <LoginModal />
       </Header>
 

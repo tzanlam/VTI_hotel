@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { AccountService } from "../service/AccountService";
 import RegisterModal from "./RegisterModal";
 
-const LoginModal = () => {
+const LoginModal = ({setRole}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user, setUser] = useState(null);
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
@@ -36,8 +36,10 @@ const LoginModal = () => {
         });
       }
       localStorage.setItem("user", JSON.stringify(accountData));
+      localStorage.setItem("role", accountData.data.role)
       toast.success("Đăng nhập thành công");
       handleCloseModal();
+      window.location.reload()
     } catch (error) {
       toast.error(error);
       handleCloseModal();
@@ -47,6 +49,8 @@ const LoginModal = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user")
+    localStorage.removeItem("role")
+    setRole(null)
     setUser(null)
     toast.info("Đăng xuất thành công");
   };
