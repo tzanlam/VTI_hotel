@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import MainPage from "../page/MainPage";
+import MainPage from "../page/user/MainPage";
 import Profile from "../page/user/Profile";
 import RoomPage from "../page/user/RoomPage";
 import BookingPage from "../page/user/BookingPage";
@@ -11,7 +11,7 @@ export const router = createBrowserRouter([
     element: <MainPage />,
     children: [
       {
-        path: "/myProfile/:accountId",  // Use :accountId as a dynamic route parameter
+        path: "/myProfile/:accountId",
         element: <Profile />
       },
       {
