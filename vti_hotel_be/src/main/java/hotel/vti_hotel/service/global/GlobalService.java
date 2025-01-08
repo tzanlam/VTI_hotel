@@ -17,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -43,6 +44,9 @@ public class GlobalService implements IGlobalService {
     @Autowired
     private ImageUploadRepository imageUploadRepository;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     @Override
     public AuthResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
@@ -52,7 +56,10 @@ public class GlobalService implements IGlobalService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String identifier = userDetails.getUsername();
         Account account = accountRepository.findByIdentifier(identifier)
-                .orElseThrow(() -> new IllegalArgumentException("Identifier not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Tài khoản không tồn tại"));
+        if (!encoder.matches(request.getPassword(), (account.getPassword()))) {
+            throw new RuntimeException("Mật khẩu không đúng");
+        }
         String token = jwtTokenUtil.generateToken(userDetails);
         return new AuthResponse(String.valueOf(account.getId()), token, request.getIdentifier(), account.getImageCard(), userDetails.getAuthorities());
     }
