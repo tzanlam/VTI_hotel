@@ -17,19 +17,22 @@ public class AccountDTO {
     private String amountSpent;
     private String cumulativePoint;
     private String accountStatus;
+    private String role;
 
     public AccountDTO(Account account) {
         this.accountId = String.valueOf(account.getId());
-        this.fullName = account.getFullName();
-        this.username = account.getUsername();
-        this.email = account.getEmail();
-        this.phoneNumber = account.getPhoneNumber();
-        this.birthDate = String.valueOf(account.getBirthDate());
-        this.imageCard = account.getImageCard();
-        this.gender = account.getGender().toString();
-        this.accountLevel = String.valueOf(account.getLevel());
+        this.fullName = account.getFullName() != null ? account.getFullName() : null;
+        this.username = account.getUsername() != null ? account.getUsername() : null;
+        this.email = account.getEmail() != null ? account.getEmail() : null;
+        this.phoneNumber = account.getPhoneNumber() != null ? account.getPhoneNumber() : null;
+        this.birthDate = account.getBirthDate() != null ? String.valueOf(account.getBirthDate()) : null;
+        this.imageCard = account.getImageCard() != null ? account.getImageCard() : null;
+        this.gender = account.getGender() != null ? account.getGender().toString() : null;
+        this.accountLevel = account.getLevel() != null ? String.valueOf(account.getLevel()) : null;
         this.amountSpent = String.valueOf(account.getAmountSpent());
         this.cumulativePoint = String.valueOf(account.getCumulativePoints());
-        this.accountStatus = String.valueOf(account.getStatus());
+        this.accountStatus = account.getStatus() != null ? String.valueOf(account.getStatus()) : null;
+        this.role = account.getRole() != null ? String.valueOf(account.getRole()) : null;
     }
+
 }
