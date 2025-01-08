@@ -7,7 +7,7 @@ import { MoreService } from "../service/MoreService";
 import { ToastContainer } from "react-toastify";
 import "../asset/css/LoginModal.css";
 import avt_default from "../asset/image/avt_default.jpg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AccountService } from "../service/AccountService";
 import RegisterModal from "./RegisterModal";
 
@@ -15,7 +15,6 @@ const LoginModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [user, setUser] = useState(null);
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
-  const navigate = useNavigate();
 
   const handleOpenModal = () => setIsModalVisible(true);
   const handleCloseModal = () => setIsModalVisible(false);
@@ -27,11 +26,10 @@ const LoginModal = () => {
     try {
       const response = await MoreService.login(loginRequest);
       localStorage.setItem("token", response.data.token);
-      const accountData = await AccountService.fetchAccountById(
-        response.data.accountId
-      );
+      const accountData = await AccountService.fetchAccountById(response.data.accountId);
       if (accountData) {
         setUser({
+          role: accountData.data.role,
           accountId: response.data.accountId,
           fullName: response.data.identifier,
           image: accountData.data.imageCard || avt_default,
@@ -39,21 +37,17 @@ const LoginModal = () => {
       }
       localStorage.setItem("user", JSON.stringify(accountData));
       toast.success("Đăng nhập thành công");
-      if (accountData.data.role === "ADMIN") {
-        navigate("/mainAdmin")
-      }else{
-        navigate("/")
-      }
       handleCloseModal();
     } catch (error) {
-      toast.error("Sai thông tin đăng nhập hoặc mật khẩu");
+      toast.error(error);
       handleCloseModal();
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setUser(null);
+    localStorage.removeItem("user")
+    setUser(null)
     toast.info("Đăng xuất thành công");
   };
 
