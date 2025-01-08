@@ -1,24 +1,22 @@
 // src/pages/MainPage.js
 import React from 'react';
-import LoginModal from '../components/LoginModal';
-import MenuUser from '../page/user/MenuUser';  // Import MenuUser
-import '../asset/css/MainPage.css';
+import LoginModal from '../../components/LoginModal';
+import MenuUser from './MenuUser';  // Import MenuUser
+import '../../asset/css/MainPage.css';
 import { Layout } from 'antd';
 import { Outlet, useLocation } from 'react-router-dom';
-import main_img from '../asset/image/main_img.png'
+import main_img from '../../asset/image/main_img.png'
 
 const { Header, Footer, Content } = Layout;
 
 const MainPage = () => {
   const location = useLocation()
-
   return (
     <Layout className="main-page">
       {/* Header */}
       <Header className="main-header" style={{ background: "#003366" }}>
         <h1 style={{ color: 'white' }}>Huy Phương Hotel</h1>
-        <MenuUser /> {/* Thêm MenuUser vào đây */}
-        {/* Hiển thị LoginModal */}
+        <MenuUser />
         <LoginModal />
       </Header>
 
