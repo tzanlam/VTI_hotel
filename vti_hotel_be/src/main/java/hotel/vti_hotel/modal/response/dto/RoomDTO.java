@@ -12,6 +12,8 @@ public class RoomDTO {
     private String quantity;
     private String priceDay;
     private String priceNight;
+    private String priceFirstHour;
+    private String priceNextHour;
 
     public RoomDTO(Room room) {
         this.roomId = String.valueOf(room.getId());
@@ -21,5 +23,7 @@ public class RoomDTO {
         this.quantity = String.valueOf(room.getQuantity());
         this.priceDay = String.valueOf(room.getPriceDay());
         this.priceNight = String.valueOf(room.getPriceNight());
+        this.priceFirstHour = String.valueOf(room.getPriceFirstHour());
+        this.priceNextHour = String.valueOf(room.getPriceNextHour());
     }
 }

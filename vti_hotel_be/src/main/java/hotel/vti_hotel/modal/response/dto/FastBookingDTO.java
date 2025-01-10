@@ -19,7 +19,7 @@ public class FastBookingDTO {
         this.fastBookingId = String.valueOf(fastBook.getId());
         this.fullName = fastBook.getFullName();
         this.phoneNumber = fastBook.getPhoneNumber();
-        this.room = String.valueOf(new RoomDTO(fastBook.getRoom()));
+        this.room = new RoomDTO(fastBook.getRoom()).getRoomName();
         this.typeBooking = fastBook.getType().toString();
         this.checkin = fastBook.getCheckIn().toString();
         this.checkout = fastBook.getCheckOut().toString();

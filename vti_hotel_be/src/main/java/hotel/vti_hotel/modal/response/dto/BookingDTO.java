@@ -17,8 +17,8 @@ public class BookingDTO {
 
     public BookingDTO(Booking booking) {
         this.bookingId = String.valueOf(booking.getId());
-        this.account = String.valueOf(new AccountDTO(booking.getAccount()));
-        this.room = String.valueOf(new RoomDTO(booking.getRoom()));
+        this.account = new AccountDTO(booking.getAccount()).getFullName();
+        this.room = new RoomDTO(booking.getRoom()).getRoomName();
         this.typeBooking = booking.getTypeBooking().toString();
         this.checkIn = String.valueOf(booking.getCheckIn());
         this.checkOut = String.valueOf(booking.getCheckOut());

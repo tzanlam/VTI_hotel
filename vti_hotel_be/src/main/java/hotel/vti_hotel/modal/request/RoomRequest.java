@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class RoomRequest {
-    private String name;
+    private String roomName;
     private String imageRoom;
     private String description;
     private int quantity;
@@ -35,7 +35,7 @@ public class RoomRequest {
     }
 
     private void populate(Room room) {
-        room.setName(name);
+        room.setName(roomName);
         room.setImageRoom(imageRoom);
         room.setDescription(description);
         room.setQuantity(quantity);
