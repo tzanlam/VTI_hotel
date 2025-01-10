@@ -11,14 +11,12 @@ import { Link } from "react-router-dom";
 import { AccountService } from "../service/AccountService";
 import RegisterModal from "./RegisterModal";
 
-const LoginModal = ({setRole}) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+const LoginModal = ({ setRole, isModalVisible, setIsModalVisible }) => { // Nhận prop isModalVisible và setIsModalVisible
   const [user, setUser] = useState(null);
   const [isRegisterVisible, setIsRegisterVisible] = useState(false);
 
   const handleOpenModal = () => setIsModalVisible(true);
   const handleCloseModal = () => setIsModalVisible(false);
-
   const handleOpenRegisterModal = () => setIsRegisterVisible(true);
   const handleCloseRegisterModal = () => setIsRegisterVisible(false);
 
@@ -36,10 +34,10 @@ const LoginModal = ({setRole}) => {
         });
       }
       localStorage.setItem("user", JSON.stringify(accountData));
-      localStorage.setItem("role", accountData.data.role)
+      localStorage.setItem("role", accountData.data.role);
       toast.success("Đăng nhập thành công");
       handleCloseModal();
-      window.location.reload()
+      // window.location.reload();
     } catch (error) {
       toast.error(error);
       handleCloseModal();
@@ -48,10 +46,9 @@ const LoginModal = ({setRole}) => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user")
-    localStorage.removeItem("role")
-    setRole(null)
-    setUser(null)
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
+    setUser(null);
     toast.info("Đăng xuất thành công");
   };
 

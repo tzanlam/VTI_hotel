@@ -2,7 +2,7 @@ import { url } from "./axios"
 
 export const FastBookingService = {
     fetchFastBookings(){
-        return url.get("getFastBooking")
+        return url.get("getFastBookings")
     },
 
     fetchFastBookingById(fastBookingId){

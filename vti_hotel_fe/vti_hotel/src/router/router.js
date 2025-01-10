@@ -1,9 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
-import MainPage from "../page/user/MainPage";
+import MainPage from "../page/MainPage";
 import Profile from "../page/user/Profile";
 import RoomPage from "../page/user/RoomPage";
 import BookingPage from "../page/user/BookingPage";
 import Contact from "../page/user/Contact";
+import ListAccount from "../page/admin/ListAccount";
+import RoomManager from "../page/admin/RoomManager";
+import ListBooking from "../page/admin/ListBooking";
+import ListFastBooking from "../page/admin/ListFastBooking";
+import ListComment from "../page/admin/ListComment";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +30,26 @@ export const router = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />
+      },
+      {
+        path: "/accounts",
+        element: <ListAccount />
+      },
+      {
+        path: "/roomManager",
+        element: <RoomManager />
+      },
+      {
+        path: "/listBooking",
+        element: <ListBooking />
+      },
+      {
+        path: "/listFastBooking",
+        element: <ListFastBooking />
+      },
+      {
+        path: "/listComment",
+        element: <ListComment />
       }
     ]
   }

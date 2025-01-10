@@ -1,25 +1,29 @@
-// src/pages/MainPage.js
-import React from 'react';
-import LoginModal from '../../components/LoginModal';
-import MenuUser from './MenuUser';  // Import MenuUser
-import '../../asset/css/MainPage.css';
+import React, { useState } from 'react';
+import LoginModal from '../components/LoginModal';
+import MenuUser from './user/MenuUser';  // Import MenuUser
+import '../asset/css/MainPage.css';
 import { Layout } from 'antd';
 import { Outlet, useLocation } from 'react-router-dom';
-import main_img from '../../asset/image/main_img.png'
-import MenuAdmin from '../admin/MenuAdmin';
+import main_img from '../asset/image/main_img.png'
+import MenuAdmin from './admin/MenuAdmin';
 
 const { Header, Footer, Content } = Layout;
 
 const MainPage = () => {
-  const location = useLocation()
-  const role = localStorage.getItem("role")
+  const location = useLocation();
+  const role = localStorage.getItem("role");
+  const [isModalVisible, setIsModalVisible] = useState(false); // Di chuyển từ LoginModal.jsx
+
   return (
     <Layout className="main-page">
       {/* Header */}
       <Header className="main-header" style={{ background: "#003366" }}>
         <h1 style={{ color: 'white' }}>Huy Phương Hotel</h1>
-        {role ? (role === "ADMIN" ? <MenuAdmin />:<MenuUser/>): <MenuUser/>}
-        <LoginModal />
+        {role ? (role === "ADMIN" ? <MenuAdmin /> : <MenuUser />) : <MenuUser />}
+        <LoginModal 
+          isModalVisible={isModalVisible} 
+          setIsModalVisible={setIsModalVisible} 
+        />
       </Header>
 
       {/* Content */}
@@ -27,13 +31,14 @@ const MainPage = () => {
         {location.pathname === '/' ? (        
           <div className='main-image-container'>
             <img
-            src={main_img}
-            alt='WELCOME TO HUY PHƯƠNG HOTEL'
-            style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+              src={main_img}
+              alt='WELCOME TO HUY PHƯƠNG HOTEL'
+              style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
             />
           </div>
-          ):(<Outlet/>)
-          }
+        ) : (
+          <Outlet />
+        )}
       </Content>
 
       {/* Footer */}
