@@ -1,13 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Form, Input, InputNumber, Button, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { MoreService } from "../service/MoreService";
+import { toast, ToastContainer } from "react-toastify";
 
 const UpdateRoomModal = ({ visible, onCancel, onUpdate, roomData }) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null)
 
-  const handleFinish = (values) => {
-    onUpdate(values);
-    form.resetFields();
+  const hanldeUpload = async (file) =>{
+    const formData = new FormData();
+    formData.append("folder", "image_room")
+    formData.append("file", file)
+
+    try{
+      setLoading(true)
+      const response = await MoreService.uploadImage(formData)
+      return response.data.url
+    }catch(error){
+      toast.error("Failed")
+    }finally{
+      setLoading(false)
+    }
+  }
+
+  const handleFinish = async (values) => {
+    try{
+      setLoading(true)
+      let imageUrl = roomData?.imageRoom
+      if (image) {
+        imageUrl = await hanldeUpload(image)
+      }
+
+      const updateRoomValues = {...values, imageRoom: imageUrl}
+      onUpdate(updateRoomValues)
+      form.resetFields();
+    }catch(err){
+      toast.error(err)
+    }finally{
+      setLoading(false)
+    }
   };
 
   return (
@@ -79,22 +112,25 @@ const UpdateRoomModal = ({ visible, onCancel, onUpdate, roomData }) => {
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
 
-        <Form.Item name="imageRoom" label="Hình ảnh">
+        <Form.Item label="Ảnh mới">
           <Upload
-            beforeUpload={() => false}
-            listType="picture"
-            accept="image/*"
+          beforeUpload={(file) => {
+            setImage(file)
+            return false;
+          }}
+          maxCount={1}
           >
             <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
           </Upload>
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+          <Button type="primary" htmlType="submit" style={{ width: "100%" }} loading={loading}>
             Cập nhật
           </Button>
         </Form.Item>
       </Form>
+      <ToastContainer/>
     </Modal>
   );
 };

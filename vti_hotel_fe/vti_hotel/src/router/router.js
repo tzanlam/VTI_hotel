@@ -9,6 +9,7 @@ import RoomManager from "../page/admin/RoomManager";
 import ListBooking from "../page/admin/ListBooking";
 import ListFastBooking from "../page/admin/ListFastBooking";
 import ListComment from "../page/admin/ListComment";
+import BookingDetailsPage from "../page/user/BookingDetailsPage";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
       {
         path: "/listComment",
         element: <ListComment />
+      },
+      {
+        path: "/booking-details/:id",
+        element: <BookingDetailsPage/>
       }
     ]
   }
