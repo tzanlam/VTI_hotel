@@ -17,7 +17,7 @@ public class ReviewService implements IReviewService {
     private final FastBookingRepository fastBookingRepository;
     private final BookingRepository bookingRepository;
 
-    public ReviewService(ReviewRepository reviewRepository, FastBookingRepository fastBookingRepository, BookingRepository bookingRepository, AccountRepository accountRepository) {
+    public ReviewService(ReviewRepository reviewRepository, FastBookingRepository fastBookingRepository, BookingRepository bookingRepository) {
         this.reviewRepository = reviewRepository;
         this.fastBookingRepository = fastBookingRepository;
         this.bookingRepository = bookingRepository;
@@ -52,6 +52,12 @@ public class ReviewService implements IReviewService {
         );
         populate(request, review);
         return new ReviewDTO(review);
+    }
+
+    @Override
+    public List<ReviewDTO> findReviewsByRoomId(int roomId) {
+        List<Review> reviews = reviewRepository.findByRoomId(roomId);
+        return reviews.stream().map(ReviewDTO::new).collect(Collectors.toList());
     }
 
     private void populate (ReviewRequest request, Review review){

@@ -74,6 +74,8 @@ public class SecurityConfig {
                                 "/hotel/findVoucherByPoint",
                                 "/hotel/findVoucherActive"
 
+                                // review
+                                ,"/hotel/findReviewByRoom"
                                 // more
                                 ,"/hotel/login"
                                 ,"/hotel/sendMail"

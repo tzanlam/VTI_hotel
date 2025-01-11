@@ -15,4 +15,6 @@ public interface IReviewService {
 
     // update
     ReviewDTO updateReview(int id, ReviewRequest request);
+
+    List<ReviewDTO> findReviewsByRoomId(int roomId);
 }

@@ -5,18 +5,19 @@ import hotel.vti_hotel.modal.entity.Booking;
 import hotel.vti_hotel.modal.entity.Room;
 import hotel.vti_hotel.modal.entity.Voucher;
 import hotel.vti_hotel.modal.request.BookingRequest;
+import hotel.vti_hotel.modal.request.MailSenderRequest;
 import hotel.vti_hotel.modal.response.dto.BookingDTO;
 import hotel.vti_hotel.repository.AccountRepository;
 import hotel.vti_hotel.repository.BookingRepository;
 import hotel.vti_hotel.repository.RoomRepository;
 import hotel.vti_hotel.repository.VoucherRepository;
+import hotel.vti_hotel.service.mailSender.IMailSender;
 import hotel.vti_hotel.support.Calculate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static hotel.vti_hotel.support.ConvertString.*;
@@ -27,12 +28,14 @@ public class BookingService implements IBookingService {
     private final AccountRepository accountRepository;
     private final RoomRepository roomRepository;
     private final VoucherRepository voucherRepository;
+    private final IMailSender mailSender;
 
-    public BookingService(BookingRepository bookingRepository, AccountRepository accountRepository, RoomRepository roomRepository, VoucherRepository voucherRepository) {
+    public BookingService(BookingRepository bookingRepository, AccountRepository accountRepository, RoomRepository roomRepository, VoucherRepository voucherRepository, IMailSender mailSender) {
         this.bookingRepository = bookingRepository;
         this.accountRepository = accountRepository;
         this.roomRepository = roomRepository;
         this.voucherRepository = voucherRepository;
+        this.mailSender = mailSender;
     }
 
     @Override
@@ -61,6 +64,11 @@ public class BookingService implements IBookingService {
         Booking booking = new Booking();
         populateBooking(booking, request);
         bookingRepository.save(booking);
+        MailSenderRequest mailRequest = new MailSenderRequest();
+        mailRequest.setTo(accountRepository.findById(request.getAccountId()).get().getEmail());
+        mailRequest.setSubject("Booking created");
+        mailRequest.setBody(new BookingDTO(booking).toString());
+        mailSender.mailInformationBooking(booking.getId(), mailRequest);
         return new BookingDTO(booking);
     }
 
@@ -75,7 +83,7 @@ public class BookingService implements IBookingService {
     }
 
 
-    private void populateBooking(Booking booking, BookingRequest request) throws Exception {
+    private void populateBooking(Booking booking, BookingRequest request) {
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new NullPointerException("Account id " + request.getAccountId() + " not found"));
         Room room = roomRepository.findById(request.getRoomId())

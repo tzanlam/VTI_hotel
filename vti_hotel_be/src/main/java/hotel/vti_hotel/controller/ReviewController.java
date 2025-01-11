@@ -52,4 +52,12 @@ public class ReviewController {
         }
     }
 
+    @GetMapping("/findReviewByRoom")
+    public ResponseEntity<?> findReviewByRoom(@RequestParam("roomId") int roomId) {
+        try{
+            return ResponseEntity.ok(reviewService.findReviewsByRoomId(roomId));
+        }catch(Exception e){
+            return new ResponseEntity<>("Error: "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

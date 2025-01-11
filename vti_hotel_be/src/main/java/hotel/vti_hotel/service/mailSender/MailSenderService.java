@@ -1,8 +1,6 @@
 package hotel.vti_hotel.service.mailSender;
 
-import hotel.vti_hotel.modal.entity.Account;
 import hotel.vti_hotel.modal.request.MailSenderRequest;
-import hotel.vti_hotel.repository.AccountRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +14,7 @@ public class MailSenderService implements IMailSender {
     private String emailAdmin;
     private final JavaMailSender javaMailSender;
 
-    public MailSenderService(JavaMailSender javaMailSender, AccountRepository accountRepository) {
+    public MailSenderService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 
@@ -47,9 +45,11 @@ public class MailSenderService implements IMailSender {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom(request.getTo());
-        helper.setTo("tzanlam@gmail.com");
-        helper.setSubject("");
+        helper.setFrom(emailAdmin);
+        helper.setTo(request.getTo());
+        helper.setSubject(request.getSubject());
+        helper.setText(request.getBody(), true);
+        javaMailSender.send(message);
         return "Mail đã được gửi thành công";
     }
 
