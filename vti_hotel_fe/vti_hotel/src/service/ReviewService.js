@@ -9,6 +9,10 @@ export const ReviewService = {
         return url.get(`findReviewById?reviewId=${reviewId}`)
     },
 
+    fetchReviewsByRoom(roomId){
+        return url.get(`findReviewByRoom?roomId=${roomId}`)
+    },
+
     createReview(reviewRequest){
         return url.post("createReview", reviewRequest)
     },

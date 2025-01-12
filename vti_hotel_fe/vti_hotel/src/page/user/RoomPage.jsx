@@ -2,56 +2,66 @@ import React, { useEffect, useState } from "react";
 import { RoomService } from "../../service/RoomService";
 import { Button, Card, Modal, Spin, Alert } from "antd";
 import "../../asset/css/RoomPage.css";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ReviewService } from "../../service/ReviewService";
+import avt_default from "../../asset/image/avt_default.jpg";
 const RoomPage = () => {
   const [rooms, setRooms] = useState([]);
   const [selectRoom, setSelectRoom] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Sử dụng hook useNavigate
+  const [reviews, setReviews] = useState([]);
+  const navigate = useNavigate();
+
+  const fetchReviews = async (roomId) => {
+    try {
+      const response = await ReviewService.fetchReviewsByRoom(roomId);
+      setReviews(response?.data || []);
+    } catch (err) {
+      toast.error("Lỗi khi tải đánh giá.");
+      setReviews([]);
+    }
+  };
 
   useEffect(() => {
-    RoomService.fetchRooms()
-      .then((response) => {
-        if (response.data) {
-          setRooms(response.data);
-        } else {
-          setError("Không có dữ liệu phòng.");
-        }
-      })
-      .catch(() => {
+    const fetchRooms = async () => {
+      try {
+        const response = await RoomService.fetchRooms();
+        setRooms(response?.data || []);
+      } catch {
         setError("Lỗi khi tải dữ liệu phòng.");
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchRooms();
   }, []);
 
-  const handleCardClick = (roomId) => {
-    setLoading(true);
-    RoomService.fetchRoomById(roomId)
-      .then((response) => {
-        setSelectRoom(response.data);
-        setIsModalVisible(true);
-      })
-      .catch(() => {
-        setError("Lỗi khi tải chi tiết phòng.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const handleCardClick = async (roomId) => {
+    try {
+      setLoading(true);
+      const response = await RoomService.fetchRoomById(roomId);
+      setSelectRoom(response.data);
+      await fetchReviews(roomId); // Lấy đánh giá ngay khi mở modal
+      setIsModalVisible(true);
+    } catch {
+      setError("Lỗi khi tải chi tiết phòng.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCloseModal = () => {
     setIsModalVisible(false);
     setSelectRoom(null);
+    setReviews([]);
   };
 
-  // Chuyển hướng sang BookingPage với roomId và roomName
-  const handleBookingRedirect = (roomId, roomName) => {
-    navigate("/booking", { state: { roomId, roomName } });
+  const handleBookingRedirect = (roomId) => {
+    navigate("/booking", { state: { roomId } });
   };
 
   return (
@@ -93,30 +103,85 @@ const RoomPage = () => {
           open={isModalVisible}
           onCancel={handleCloseModal}
           footer={null}
-          width={600}
+          className="custom-modal"
+          style={{maxWidth: "90vw"}}
         >
-          <img
-            alt={selectRoom.roomName}
-            src={selectRoom.imageRoom}
-            style={{ width: "100%", marginBottom: "16px" }}
-          />
-          <h4>Giới thiệu chung: {selectRoom.description}</h4>
-          <p>
-            <h5>Giá ngày:</h5> {selectRoom.priceDay} VND
-          </p>
-          <p>
-            <h5>Giá đêm:</h5> {selectRoom.priceNight} VND
-          </p>
+          <div style={{ display: "flex", gap: "24px" }}>
+            <div style={{ flex: 1 }}>
+              <img
+                alt={selectRoom.roomName}
+                src={selectRoom.imageRoom}
+                style={{ width: "100%", marginBottom: "16px" }}
+              />
+              <h4>Giới thiệu chung: {selectRoom.description}</h4>
+              <div>
+                <h5>Giá ngày:</h5> {selectRoom.priceDay} VND
+              </div>
+              <div>
+                <h5>Giá đêm:</h5> {selectRoom.priceNight} VND
+              </div>
+              <Button
+                type="primary"
+                style={{ marginTop: "16px" }}
+                onClick={() =>
+                  handleBookingRedirect(selectRoom.roomId)
+                }
+              >
+                Đặt phòng
+              </Button>
+            </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button
-              type="primary"
-              onClick={() =>
-                handleBookingRedirect(selectRoom.roomId, selectRoom.roomName)
-              }
-            >
-              Đặt phòng
-            </Button>
+            <div style={{ flex: 1, maxHeight: "500px", overflowY: "auto" }}>
+              <h4>Đánh giá từ khách hàng</h4>
+              {reviews.length > 0 ? (
+                reviews.map((review) => (
+                  <div
+                    key={review.reviewId}
+                    style={{
+                      border: "1px solid #f0f0f0",
+                      borderRadius: "8px",
+                      padding: "16px",
+                      marginBottom: "16px",
+                      display: "flex",
+                      gap: "16px",
+                    }}
+                  >
+                    <img
+                      src={review.avatar || avt_default}
+                      alt="Avatar"
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div>
+                          <strong>{review.fullName}</strong>
+                          <p style={{ margin: "4px 0", fontSize: "12px" }}>
+                            Mã đặt phòng: {review.bookingId}
+                          </p>
+                        </div>
+                        <span>
+                          <strong>{review.rating}</strong> ★
+                        </span>
+                      </div>
+                      <p style={{ marginTop: "8px" }}>{review.comment}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Chưa có đánh giá nào cho phòng này.</p>
+              )}
+            </div>
           </div>
         </Modal>
       )}

@@ -12,4 +12,11 @@
   .room-card:hover {
     transform: scale(1.05);
   }
+  .custom-modal .ant-modal {
+    width: 90vw !important; /* Chiều rộng tối đa bằng 90% chiều rộng viewport */
+  }
+  
+  .custom-modal .ant-modal-content {
+    max-width: 1400px; /* Đảm bảo nội dung không vượt quá giới hạn */
+  }
   

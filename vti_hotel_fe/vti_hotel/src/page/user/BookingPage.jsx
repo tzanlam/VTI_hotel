@@ -12,14 +12,13 @@ const BookingPage = () => {
   const location = useLocation(); // Nhận dữ liệu từ RoomPage
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState(location.state?.roomId || null);
-  // eslint-disable-next-line no-unused-vars
-  const [roomName, setRoomName] = useState(location.state?.roomName || null);
+  const [roomName, setRoomName] = useState(null); // Khởi tạo roomName
   const [rooms, setRooms] = useState([]);
   const [accountId, setAccountId] = useState(null);
   const [bookingType, setBookingType] = useState(null);
 
+  // Lấy thông tin người dùng từ localStorage
   useEffect(() => {
-    // Lấy thông tin account từ localStorage
     const user = localStorage.getItem("user");
     if (user) {
       try {
@@ -31,21 +30,28 @@ const BookingPage = () => {
     }
   }, []);
 
+  // Lấy danh sách phòng khi component được render
   useEffect(() => {
-    // Lấy danh sách các phòng
     RoomService.fetchRooms()
       .then((response) => {
         setRooms(response.data);
+        if (roomId) {
+          // Nếu có roomId, tìm ra roomName từ danh sách phòng
+          const selectedRoom = response.data.find(room => room.roomId === roomId);
+          if (selectedRoom) {
+            setRoomName(selectedRoom.roomName); // Cập nhật roomName
+          }
+        }
       })
       .catch((err) => {
         console.error("Lỗi khi lấy danh sách phòng:", err);
       });
-  }, []);
+  }, [roomId]); // Theo dõi sự thay đổi của roomId
 
   const handleRoomChange = (value) => {
     const selectedRoom = rooms.find((room) => room.roomId === value);
     setRoomId(selectedRoom?.roomId || null);
-    setRoomName(selectedRoom?.roomName || null);
+    setRoomName(selectedRoom?.roomName || null); // Cập nhật roomName
   };
 
   const handleBookingTypeChange = (value) => {
@@ -71,9 +77,9 @@ const BookingPage = () => {
     BookingService.createBooking(bookingData)
       .then((response) => {
         toast.success("Đặt phòng thành công!");
-        navigate(`/booking-details/${response.data.bookingId}`,{
-          state: {booking: response.data}
-        })
+        navigate(`/booking-details/${response.data.bookingId}`, {
+          state: { booking: response.data }
+        });
       })
       .catch((err) => {
         toast.error("Lỗi khi đặt phòng: " + err.message);
@@ -88,13 +94,11 @@ const BookingPage = () => {
         <Form.Item
           label="Tên phòng"
           name="roomId"
-          rules={[{ required: true, message: "Vui lòng chọn phòng." }]}
-        >
+          rules={[{ required: true, message: "Vui lòng chọn phòng." }]}>
           <Select
-            value={roomId}
+            value={roomId || roomName} // Nếu có roomId, sẽ dùng roomName để hiển thị
             onChange={handleRoomChange}
-            placeholder="Chọn phòng"
-          >
+            placeholder="Chọn phòng">
             {rooms.map((room) => (
               <Option key={room.roomId} value={room.roomId}>
                 {room.roomName}
@@ -107,12 +111,10 @@ const BookingPage = () => {
         <Form.Item
           label="Loại đặt phòng"
           name="typeBooking"
-          rules={[{ required: true, message: "Vui lòng chọn loại đặt phòng." }]}
-        >
+          rules={[{ required: true, message: "Vui lòng chọn loại đặt phòng." }]}>
           <Select
             placeholder="Chọn loại đặt phòng"
-            onChange={handleBookingTypeChange}
-          >
+            onChange={handleBookingTypeChange}>
             <Option value="DAILY">Theo ngày</Option>
             <Option value="HOURLY">Theo giờ</Option>
             <Option value="NIGHTLY">Theo đêm</Option>
@@ -123,8 +125,7 @@ const BookingPage = () => {
         <Form.Item
           label="Ngày check-in"
           name="checkInDate"
-          rules={[{ required: true, message: "Vui lòng chọn ngày check-in." }]}
-        >
+          rules={[{ required: true, message: "Vui lòng chọn ngày check-in." }]}>
           <DatePicker />
         </Form.Item>
 
@@ -133,10 +134,7 @@ const BookingPage = () => {
           <Form.Item
             label="Ngày check-out"
             name="checkOutDate"
-            rules={[
-              { required: true, message: "Vui lòng chọn ngày check-out." },
-            ]}
-          >
+            rules={[{ required: true, message: "Vui lòng chọn ngày check-out." }]}>
             <DatePicker />
           </Form.Item>
         )}
@@ -146,10 +144,7 @@ const BookingPage = () => {
           <Form.Item
             label="Giờ check-in"
             name="checkInTime"
-            rules={[
-              { required: true, message: "Vui lòng chọn giờ check-in." },
-            ]}
-          >
+            rules={[{ required: true, message: "Vui lòng chọn giờ check-in." }]}>
             <TimePicker format="HH:mm" />
           </Form.Item>
         )}
@@ -159,10 +154,7 @@ const BookingPage = () => {
           <Form.Item
             label="Giờ check-out"
             name="checkOutTime"
-            rules={[
-              { required: true, message: "Vui lòng chọn giờ check-out." },
-            ]}
-          >
+            rules={[{ required: true, message: "Vui lòng chọn giờ check-out." }]}>
             <TimePicker format="HH:mm" />
           </Form.Item>
         )}
