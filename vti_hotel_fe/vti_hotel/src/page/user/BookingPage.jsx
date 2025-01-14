@@ -9,10 +9,9 @@ import { toast } from "react-toastify";
 const { Option } = Select;
 
 const BookingPage = () => {
-  const location = useLocation(); // Nhận dữ liệu từ RoomPage
+  const {state} = useLocation(); // Nhận dữ liệu từ RoomPage
   const navigate = useNavigate();
-  const [roomId, setRoomId] = useState(location.state?.roomId || null);
-  const [roomName, setRoomName] = useState(location.state?.roomName || null);
+ const [form] = Form.useForm()
   const [rooms, setRooms] = useState([]);
   const [accountId, setAccountId] = useState(null);
   const [bookingType, setBookingType] = useState(null);
@@ -34,28 +33,23 @@ const BookingPage = () => {
     // Lấy danh sách các phòng
     RoomService.fetchRooms()
       .then((response) => {
-        setRooms(response.data);
+        setRooms(
+          response.data.map((item) => ({
+            label: item.roomName,
+            value: item.roomId,
+          }))
+        );
       })
       .catch((err) => {
         console.error("Lỗi khi lấy danh sách phòng:", err);
       });
   }, []);
 
-  // useEffect(()=> {
-  //   RoomService.fetchRoomById(roomId)
-  //   .then((response) => {
-  //     setRoomName(response.data.roomName)
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   })
-  // })
-
-  const handleRoomChange = (value) => {
-    const selectedRoom = rooms.find((room) => room.roomId === value);
-    setRoomId(selectedRoom?.roomId || null);
-    setRoomName(selectedRoom?.roomName || null);
-  };
+  useEffect(()=> {
+    if(state.roomId){
+      form.setFieldValue('roomId', state.roomId)
+    }
+  },[state.roomId, form])
 
   const handleBookingTypeChange = (value) => {
     setBookingType(value);
@@ -69,7 +63,7 @@ const BookingPage = () => {
 
     const bookingData = {
       accountId,
-      roomId,
+      // roomId,
       typeBooking: bookingType,
       checkInDate: values.checkInDate.format("YYYY-MM-DD"),
       checkOutDate: values.checkOutDate?.format("YYYY-MM-DD") || null,
@@ -80,9 +74,9 @@ const BookingPage = () => {
     BookingService.createBooking(bookingData)
       .then((response) => {
         toast.success("Đặt phòng thành công!");
-        navigate(`/booking-details/${response.data.bookingId}`,{
-          state: {booking: response.data}
-        })
+        navigate(`/booking-details/${response.data.bookingId}`, {
+          state: { booking: response.data },
+        });
       })
       .catch((err) => {
         toast.error("Lỗi khi đặt phòng: " + err.message);
@@ -92,26 +86,14 @@ const BookingPage = () => {
   return (
     <div>
       <h1>Đặt phòng</h1>
-      <Form onFinish={handleBookingSubmit}>
+      <Form onFinish={handleBookingSubmit} form={form}>
         {/* Chọn phòng */}
         <Form.Item
           label="Tên phòng"
           name="roomId"
           rules={[{ required: true, message: "Vui lòng chọn phòng." }]}
         >
-          <Select
-            value={roomId}
-            onChange={handleRoomChange}
-            placeholder="Chọn phòng"
-          >
-            {roomName ? (roomName):
-            (rooms.map((room) => (
-              <Option key={room.roomId} value={room.roomId}>
-                {room.roomName}
-              </Option>))
-            )
-            }
-          </Select>
+          <Select options={rooms} placeholder="Chọn phòng" />
         </Form.Item>
 
         {/* Loại đặt phòng */}
@@ -157,9 +139,7 @@ const BookingPage = () => {
           <Form.Item
             label="Giờ check-in"
             name="checkInTime"
-            rules={[
-              { required: true, message: "Vui lòng chọn giờ check-in." },
-            ]}
+            rules={[{ required: true, message: "Vui lòng chọn giờ check-in." }]}
           >
             <TimePicker format="HH:mm" />
           </Form.Item>
