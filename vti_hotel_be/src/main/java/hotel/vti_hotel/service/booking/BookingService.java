@@ -65,7 +65,13 @@ public class BookingService implements IBookingService {
         populateBooking(booking, request);
         bookingRepository.save(booking);
         MailSenderRequest mailRequest = new MailSenderRequest();
-        mailRequest.setTo(accountRepository.findById(request.getAccountId()).get().getEmail());
+        Account account = accountRepository.findById(request.getAccountId()).orElse(null);
+        if (account != null) {
+            String email = account.getEmail();
+            mailRequest.setTo(email);
+        }else {
+            throw new NullPointerException("Email not found");
+        }
         mailRequest.setSubject("Booking created");
         mailRequest.setBody(new BookingDTO(booking).toString());
         mailSender.mailInformationBooking(booking.getId(), mailRequest);
@@ -73,7 +79,7 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public BookingDTO updateBooking(int id, BookingRequest request) throws Exception {
+    public BookingDTO updateBooking(int id, BookingRequest request){
         Booking booking = bookingRepository.findById(id).orElseThrow(
                 ()-> new NullPointerException("Booking id " + id + " not found")
         );
@@ -90,7 +96,11 @@ public class BookingService implements IBookingService {
                 .orElseThrow(() -> new NullPointerException("Room id " + request.getRoomId() + " not found"));
 
         booking.setAccount(account);
-        booking.setRoom(room);
+        if (room.getQuantity() != 0) {
+            booking.setRoom(room);
+        }else {
+            throw new NullPointerException("Hết phòng");
+        }
         booking.setTypeBooking(convertToEnum(Booking.TypeBooking.class, request.getTypeBooking()));
 
         LocalDateTime checkIn ;
@@ -139,5 +149,8 @@ public class BookingService implements IBookingService {
         Voucher voucher = voucherRepository.findById(request.getVoucherId()).orElse(null);
         booking.setVoucher(voucher);
         booking.setStatus(Booking.StatusBooking.PENDING);
+        account.setAmountSpent(account.getAmountSpent() + totalPrice);
+        account.setCumulativePoints(account.getCumulativePoints() + totalPrice/10000);
+        accountRepository.save(account);
     }
 }
