@@ -10,6 +10,8 @@ import ListBooking from "../page/admin/ListBooking";
 import ListFastBooking from "../page/admin/ListFastBooking";
 import ListComment from "../page/admin/ListComment";
 import BookingDetailsPage from "../page/user/BookingDetailsPage";
+import FastBookingPage from "../page/user/FastBooking";
+import FaBookingDetailsPage from "../page/user/FastBookingDetailsPage";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +61,14 @@ export const router = createBrowserRouter([
       {
         path: "/listComment",
         element: <ListComment />
+      },
+      {
+        path: "/dat-phong-nhanh",
+        element: <FastBookingPage />
+      },
+      {
+        path: "/thong-tin-dat-phong/:id",
+        element: <FaBookingDetailsPage />
       }
     ]
   }

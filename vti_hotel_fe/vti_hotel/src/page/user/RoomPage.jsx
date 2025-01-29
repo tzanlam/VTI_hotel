@@ -61,7 +61,11 @@ const RoomPage = () => {
   };
 
   const handleBookingRedirect = (roomId) => {
+    if (localStorage.getItem("user")) {
     navigate("/booking", { state: { roomId } });
+    } else {
+      navigate("/dat-phong-nhanh", { state: { roomId } });
+    }
   };
 
   return (
