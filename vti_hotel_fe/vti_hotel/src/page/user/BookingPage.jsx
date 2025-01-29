@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Form, Button, Select, DatePicker, TimePicker } from "antd";
+import { Form, Button, Select, DatePicker, TimePicker, Card } from "antd";
 import { BookingService } from "../../service/BookingService";
 import { RoomService } from "../../service/RoomService";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
+import '../../asset/css/BookingPage.css'; // Import CSS
 
 const { Option } = Select;
 
 const BookingPage = () => {
-  const {state} = useLocation(); // Nhận dữ liệu từ RoomPage
+  const { state } = useLocation(); // Nhận dữ liệu từ RoomPage
   const navigate = useNavigate();
- const [form] = Form.useForm()
+  const [form] = Form.useForm();
   const [rooms, setRooms] = useState([]);
   const [accountId, setAccountId] = useState(null);
   const [bookingType, setBookingType] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState(null);
 
+  // Lấy thông tin account từ localStorage
   useEffect(() => {
-    // Lấy thông tin account từ localStorage
     const user = localStorage.getItem("user");
     if (user) {
       try {
@@ -29,14 +31,15 @@ const BookingPage = () => {
     }
   }, []);
 
+  // Lấy danh sách các phòng
   useEffect(() => {
-    // Lấy danh sách các phòng
     RoomService.fetchRooms()
       .then((response) => {
         setRooms(
           response.data.map((item) => ({
             label: item.roomName,
             value: item.roomId,
+            image: item.imageRoom, // Đảm bảo dữ liệu có ảnh
           }))
         );
       })
@@ -45,11 +48,17 @@ const BookingPage = () => {
       });
   }, []);
 
-  useEffect(()=> {
-    if(state.roomId){
-      form.setFieldValue('roomId', state.roomId)
+  // Nếu có `roomId` trong state, set giá trị mặc định cho form
+  useEffect(() => {
+    if (state && state.roomId) {
+      form.setFieldValue("roomId", state.roomId);
     }
-  },[state.roomId, form])
+  }, [state, form]);
+
+  const handleRoomSelect = (roomId) => {
+    setSelectedRoom(roomId);
+    form.setFieldValue("roomId", roomId); // Cập nhật giá trị form
+  };
 
   const handleBookingTypeChange = (value) => {
     setBookingType(value);
@@ -63,7 +72,7 @@ const BookingPage = () => {
 
     const bookingData = {
       accountId,
-      // roomId,
+      roomId: values.roomId,
       typeBooking: bookingType,
       checkInDate: values.checkInDate.format("YYYY-MM-DD"),
       checkOutDate: values.checkOutDate?.format("YYYY-MM-DD") || null,
@@ -86,6 +95,22 @@ const BookingPage = () => {
   return (
     <div>
       <h1>Đặt phòng</h1>
+      <div className="room-gallery">
+        {rooms.map((room) => (
+          <Card
+            key={room.value}
+            className={`room-card ${
+              selectedRoom === room.value ? "room-card-selected" : ""
+            }`}
+            hoverable
+            onClick={() => handleRoomSelect(room.value)}
+          >
+            <img src={room.image} alt={room.label} className="room-image" />
+            <p>{room.label}</p>
+          </Card>
+        ))}
+      </div>
+
       <Form onFinish={handleBookingSubmit} form={form}>
         {/* Chọn phòng */}
         <Form.Item
@@ -93,7 +118,11 @@ const BookingPage = () => {
           name="roomId"
           rules={[{ required: true, message: "Vui lòng chọn phòng." }]}
         >
-          <Select options={rooms} placeholder="Chọn phòng" />
+          <Select
+            placeholder="Chọn phòng"
+            options={rooms}
+            onChange={handleRoomSelect}
+          />
         </Form.Item>
 
         {/* Loại đặt phòng */}

@@ -55,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: "/booking-details/:id",
         element: <BookingDetailsPage/>
+      },
+      {
+        path: "/listComment",
+        element: <ListComment />
       }
     ]
   }

@@ -75,7 +75,7 @@ const RoomPage = () => {
       ) : error ? (
         <Alert message={error} type="error" showIcon />
       ) : (
-        <div className="room-grid">
+        <div className="room-grid" >
           {rooms.length > 0 ? (
             rooms.map((room) => (
               <Card
@@ -104,7 +104,8 @@ const RoomPage = () => {
           onCancel={handleCloseModal}
           footer={null}
           className="custom-modal"
-          style={{maxWidth: "90vw"}}
+          width="80vw" // Chỉnh chiều rộng modal
+          style={{ maxWidth: "90vw" }}
         >
           <div style={{ display: "flex", gap: "24px" }}>
             <div style={{ flex: 1 }}>
@@ -167,7 +168,7 @@ const RoomPage = () => {
                         <div>
                           <strong>{review.fullName}</strong>
                           <p style={{ margin: "4px 0", fontSize: "12px" }}>
-                            Mã đặt phòng: {review.bookingId}
+                            {review.booking ? `Mã đặt phòng: ${review.booking}`: `Mã đặt nhanh: ${review.fastBooking}` }
                           </p>
                         </div>
                         <span>
