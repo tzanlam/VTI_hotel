@@ -76,6 +76,10 @@ public class SecurityConfig {
 
                                 // review
                                 ,"/hotel/findReviewByRoom"
+
+                                //fast booking
+                                ,"hotel/createFastBooking"
+
                                 // more
                                 ,"/hotel/login"
                                 ,"/hotel/sendMail"
