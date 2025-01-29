@@ -3,6 +3,8 @@ package hotel.vti_hotel.modal.response.dto;
 import hotel.vti_hotel.modal.entity.Review;
 import lombok.Data;
 
+import java.util.Objects;
+
 @Data
 public class ReviewDTO {
     private String reviewId;
@@ -10,6 +12,7 @@ public class ReviewDTO {
     private String room;
     private String booking;
     private String fastBooking;
+    private String code;
     private String rating;
     private String comment;
 
@@ -17,8 +20,10 @@ public class ReviewDTO {
         this.reviewId = String.valueOf(review.getId());
         this.fullName = review.getFullName();
         this.room = String.valueOf(new RoomDTO(review.getRoom()));
-        this.booking = String.valueOf(new BookingDTO(review.getBooking()));
-        this.fastBooking = String.valueOf(new FastBookingDTO(review.getFastBooking()));
+                if(Objects.nonNull(review.getBooking())){
+                    this.code = String.valueOf(review.getBooking().getId());
+                }
+                else { this.code = String.valueOf(review.getFastBooking().getId());}
         this.rating = String.valueOf(review.getRating());
         this.comment = review.getComment();
     }

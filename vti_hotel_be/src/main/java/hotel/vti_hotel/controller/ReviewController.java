@@ -2,6 +2,7 @@ package hotel.vti_hotel.controller;
 
 import hotel.vti_hotel.modal.request.ReviewRequest;
 import hotel.vti_hotel.service.review.IReviewService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,9 @@ public class ReviewController {
     }
 
     @PostMapping("/createReview")
-    public ResponseEntity<?> createReview(@RequestBody ReviewRequest reviewRequest) {
+    public ResponseEntity<?> createReview(
+            @Valid
+            @RequestBody ReviewRequest reviewRequest) {
         try{
             return ResponseEntity.ok(reviewService.createReview(reviewRequest));
         }catch(Exception e){

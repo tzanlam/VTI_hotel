@@ -41,7 +41,7 @@ public class MailSenderService implements IMailSender {
     }
 
     @Override
-    public String mailInformationBooking(int bookingId, MailSenderRequest request) throws MessagingException {
+    public void mailInformationBooking(int bookingId, MailSenderRequest request) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
@@ -50,7 +50,6 @@ public class MailSenderService implements IMailSender {
         helper.setSubject(request.getSubject());
         helper.setText(request.getBody(), true);
         javaMailSender.send(message);
-        return "Mail đã được gửi thành công";
     }
 
     @Override

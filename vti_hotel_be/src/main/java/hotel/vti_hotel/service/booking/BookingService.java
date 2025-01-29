@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static hotel.vti_hotel.support.ConvertString.*;
@@ -61,21 +62,51 @@ public class BookingService implements IBookingService {
 
     @Override
     public BookingDTO createBooking(BookingRequest request) throws Exception {
+        // Tạo đối tượng Booking từ BookingRequest
         Booking booking = new Booking();
         populateBooking(booking, request);
+
+        // Lưu thông tin đặt phòng vào database
         bookingRepository.save(booking);
+
+        // Chuẩn bị gửi email
         MailSenderRequest mailRequest = new MailSenderRequest();
-        Account account = accountRepository.findById(request.getAccountId()).orElse(null);
-        if (account != null) {
-            String email = account.getEmail();
-            mailRequest.setTo(email);
-        }else {
-            throw new NullPointerException("Email not found");
+        Account account = accountRepository.findById(request.getAccountId())
+                .orElseThrow(() -> new IllegalArgumentException("Account ID không tồn tại"));
+
+        String email = account.getEmail();
+        if (email == null || email.isEmpty()) {
+            throw new NullPointerException("Email của người đặt phòng không tồn tại");
         }
-        mailRequest.setSubject("Booking created");
-        mailRequest.setBody(new BookingDTO(booking).toString());
+
+        // Thiết lập thông tin email
+        mailRequest.setTo(email);
+        mailRequest.setSubject("Thông tin đặt phòng của bạn");
+        mailRequest.setBody(buildEmailBody(booking));
+
+        // Gửi email thông báo thông tin đặt phòng
         mailSender.mailInformationBooking(booking.getId(), mailRequest);
+
+        // Trả về DTO cho Booking
         return new BookingDTO(booking);
+    }
+
+    /**
+     * Tạo nội dung email thông báo thông tin đặt phòng
+     * @param booking Đối tượng Booking
+     * @return Nội dung email dưới dạng chuỗi HTML
+     */
+    private String buildEmailBody(Booking booking) {
+        String voucherInfo = (Objects.nonNull(booking.getVoucher())) ? booking.getVoucher().toString() : "Không có";
+        return "<h1 style=\"text-align: center;\">Thông tin đặt phòng của bạn</h1>" +
+                "<p><strong>Mã đặt phòng:</strong> " + booking.getId() + "</p>" +
+                "<p><strong>Người đặt phòng:</strong> " + booking.getAccount().getFullName() + "</p>" +
+                "<p><strong>Loại phòng:</strong> " + booking.getRoom().getName() + "</p>" +
+                "<p><strong>Loại đặt phòng:</strong> " + booking.getTypeBooking() + "</p>" +
+                "<p><strong>Thời gian nhận phòng:</strong> " + booking.getCheckIn() + "</p>" +
+                "<p><strong>Thời gian trả phòng:</strong> " + booking.getCheckOut() + "</p>" +
+                "<p><strong>Voucher:</strong> " + voucherInfo + "</p>" +
+                "<p><strong>Tổng phí:</strong> " + booking.getTotalPrice() + " VND</p>";
     }
 
     @Override
