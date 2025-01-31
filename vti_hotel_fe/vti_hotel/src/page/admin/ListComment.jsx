@@ -55,7 +55,7 @@ const ListComment = () => {
               hoverable
             >
               <p><strong>Họ tên:</strong> {review.fullName}</p>
-              <p><strong>Phòng:</strong> {review.roomName}</p>
+              <p><strong>Phòng:</strong> {review.room}</p>
               <p><strong>Bình luận:</strong> {review.comment}</p>
               <p><strong>Đánh giá:</strong> {review.rating} ⭐</p>
             </Card>
