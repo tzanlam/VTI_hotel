@@ -64,7 +64,7 @@ public class AccountService implements IAccountService {
         mailSenderRequest.setTo(account.getEmail());
         mailSenderRequest.setSubject("Cảm ơn bạn vì đã đăng kí tài khoản bên khách sạn chúng tôi.");
         mailSenderRequest.setBody("Mã xác nhận email của bạn: " + confirmCode);
-        mailSender.mailSendCodeConfirm(mailSenderRequest, confirmCode);
+        mailSender.mailSendCodeConfirm(mailSenderRequest);
         return new AccountDTO(account);
     }
 

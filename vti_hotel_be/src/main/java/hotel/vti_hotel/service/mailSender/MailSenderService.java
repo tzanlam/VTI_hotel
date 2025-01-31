@@ -20,13 +20,13 @@ public class MailSenderService implements IMailSender {
 
 
     @Override
-    public void mailSendCodeConfirm(MailSenderRequest request, String codeConfirm) throws MessagingException {
+    public void mailSendCodeConfirm(MailSenderRequest request) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(request.getTo());
-        helper.setTo(emailAdmin);
-        helper.setSubject(codeConfirm);
+        helper.setFrom(emailAdmin);
+        helper.setTo(request.getTo());
+        helper.setSubject(request.getSubject());
+        helper.setText(request.getBody(), true);
     }
 
     @Override
