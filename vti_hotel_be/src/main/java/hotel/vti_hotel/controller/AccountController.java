@@ -2,8 +2,8 @@ package hotel.vti_hotel.controller;
 
 import hotel.vti_hotel.modal.request.AccountRequest;
 import hotel.vti_hotel.service.account.IAccountService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -69,11 +69,11 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerAccount(@RequestBody AccountRequest request){
+    public ResponseEntity<?> registerAccount(@Valid @RequestBody AccountRequest request){
         try{
             return new ResponseEntity<>(accountService.registerAccount(request), HttpStatus.CREATED);
         }catch(Exception e){
-            return new ResponseEntity<>("Error: "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error: "+e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

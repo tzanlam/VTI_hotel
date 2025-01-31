@@ -1,17 +1,24 @@
 package hotel.vti_hotel.modal.request;
 
 import hotel.vti_hotel.modal.entity.Account;
+import hotel.vti_hotel.validation.ValidUniqueEmail.UniqueEmail;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static hotel.vti_hotel.support.ConvertString.convertToEnum;
 import static hotel.vti_hotel.support.ConvertString.convertToLocalDate;
 
+@UniqueEmail
 @Data
 public class AccountRequest {
     private String fullName;
+    @NotNull
     private String username;
+    @NotNull
     private String password;
+    @NotNull
     private String email;
     private String phoneNumber;
     private String birthDate;
@@ -25,9 +32,10 @@ public class AccountRequest {
 
     public Account register(){
         Account account = new Account();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         account.setUsername(username);
-        account.setPassword(password);
-        account.setFullName(null);
+        account.setPassword(passwordEncoder.encode(password));
+        account.setFullName(fullName);
         account.setGender(null);
         account.setImageCard(null);
         account.setEmail(email);
