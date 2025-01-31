@@ -19,7 +19,7 @@ public class ReviewDTO {
     public ReviewDTO(Review review) {
         this.reviewId = String.valueOf(review.getId());
         this.fullName = review.getFullName();
-        this.room = String.valueOf(new RoomDTO(review.getRoom()));
+        this.room = review.getRoom().getName();
                 if(Objects.nonNull(review.getBooking())){
                     this.code = String.valueOf(review.getBooking().getId());
                 }
