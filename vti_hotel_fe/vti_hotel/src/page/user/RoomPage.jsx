@@ -79,7 +79,7 @@ const RoomPage = () => {
       ) : error ? (
         <Alert message={error} type="error" showIcon />
       ) : (
-        <div className="room-grid" >
+        <div className="room-grid" style={{ display: "flex"}}>
           {rooms.length > 0 ? (
             rooms.map((room) => (
               <Card
@@ -91,7 +91,8 @@ const RoomPage = () => {
               >
                 <Card.Meta
                   title={room.roomName}
-                  description={`Giá: ${room.priceDay} VND/ngày`}
+                  description={`Giá: ${room.priceDay} VND/ngày  
+                  Phòng trống: ${room.quantity}` }
                 />
               </Card>
             ))
@@ -172,7 +173,7 @@ const RoomPage = () => {
                         <div>
                           <strong>{review.fullName}</strong>
                           <p style={{ margin: "4px 0", fontSize: "12px" }}>
-                            {review.booking ? `Mã đặt phòng: ${review.booking}`: `Mã đặt nhanh: ${review.fastBooking}` }
+                            <strong> Mã đặt phòng: {review.code}</strong>
                           </p>
                         </div>
                         <span>

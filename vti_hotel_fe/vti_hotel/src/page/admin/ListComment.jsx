@@ -35,7 +35,7 @@ const ListComment = () => {
       message.warning("Vui lòng nhập nội dung phản hồi!");
       return;
     }
-    message.success(`Phản hồi cho đánh giá ${selectedReview.id} đã gửi!`);
+    message.success(`Phản hồi cho đánh giá ${selectedReview.fullName} đã gửi!`);
     setResponse("");
     setSelectedReview(null);
   };

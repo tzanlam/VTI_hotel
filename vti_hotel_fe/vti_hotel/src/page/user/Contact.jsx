@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Select, Input, Button, Spin } from "antd";
+import { Form, Select, Input, Button, Spin, message } from "antd";
 import { toast } from "react-toastify";
 import { MoreService } from "../../service/MoreService";
 
@@ -8,6 +8,7 @@ const { TextArea } = Input;
 
 const Contact = () => {
   const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
 
   const handleSubmit = async (values) => {
     const { email, subject, content } = values;
@@ -15,7 +16,8 @@ const Contact = () => {
     try {
       const response = await MoreService.sendMailSupported(email, subject, content);
       if (response) {
-        toast.success("Gửi email thành công!");
+        message.success("Gửi email thành công!");
+        form.resetFields();
       }
     } catch (error) {
       toast.error("Gửi email thất bại. Vui lòng thử lại.");
@@ -27,7 +29,7 @@ const Contact = () => {
   return (
     <div style={{ maxWidth: 600, margin: "0 auto", padding: "20px" }}>
       <h1>Liên Hệ</h1>
-      <Form layout="vertical" onFinish={handleSubmit}>
+      <Form layout="vertical" onFinish={handleSubmit} form={form}>
         {/* Email */}
         <Form.Item
           label="Email"
